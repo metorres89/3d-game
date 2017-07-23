@@ -37,15 +37,17 @@ public class EnemyMovement : MonoBehaviour {
 	private void ProcessMovement() {
 		float distanceFromPlayer = Vector3.Distance (gameObject.transform.position, myPlayerState.gameObject.transform.position);
 
+		//Debug.LogFormat ("distanceFromPlayer: {0}", distanceFromPlayer);
+
+		if (distanceFromPlayer <= playerDistanceTrigger && myPlayerState.isAlive) {
+
+			isFollowingPlayer = true;
+			myFollowingPlayerTimer = followingPlayerTimeLength;
+
+		}
+
 		if (!isFollowingPlayer) {
-
-			if (distanceFromPlayer <= playerDistanceTrigger && myPlayerState.isAlive) {
-
-				isFollowingPlayer = true;
-				myFollowingPlayerTimer = followingPlayerTimeLength;
-
-			} else {
-
+			
 				myNavMeshAgent.SetDestination (patrolPoints [patrolPointIndex].transform.position);
 
 				if (myNavMeshAgent.remainingDistance < myNavMeshAgent.stoppingDistance) {
@@ -55,14 +57,11 @@ public class EnemyMovement : MonoBehaviour {
 					if (patrolPointIndex >= patrolPoints.Length)
 						patrolPointIndex = 0;
 				}
-			}
-
-		}
-
-		if (isFollowingPlayer) {
+		} else {
+			
 			myNavMeshAgent.SetDestination (myPlayerState.gameObject.transform.position);
 
-			myFollowingPlayerTimer -= Time.deltaTime;
+			myFollowingPlayerTimer -= Time.fixedDeltaTime;
 
 			if (myFollowingPlayerTimer <= 0.0f)
 				isFollowingPlayer = false;
