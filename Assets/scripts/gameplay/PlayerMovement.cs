@@ -15,10 +15,12 @@ public class PlayerMovement : MonoBehaviour {
 	[SerializeField] private float verticalRotationMax = 90.0f;
 	[SerializeField] private bool isOnGround = false;
 
+	private PlayerState myPlayerState;
 	private Rigidbody myRigidbody;
 	private CapsuleCollider myCapsuleCollider;
 
 	void Start () {
+		myPlayerState = gameObject.GetComponent<PlayerState> ();
 		myRigidbody = gameObject.GetComponent<Rigidbody> ();
 		myCapsuleCollider = gameObject.GetComponent<CapsuleCollider> ();
 
@@ -27,9 +29,14 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	void FixedUpdate () {
+
 		CheckIfGrounded ();
-		ProcessWalkMovement ();
-		ProcessJump ();
+
+		if (myPlayerState.isAlive) {
+			ProcessWalkMovement ();
+			ProcessJump ();
+		}
+
 		ProcessRotation ();
 
 		//Debug

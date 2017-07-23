@@ -9,15 +9,17 @@ public class EnemyMovement : MonoBehaviour {
 	[SerializeField]private float playerDistanceTrigger = 10.0f;
 	[SerializeField]private float followingPlayerTimeLength = 10.0f;
 
+	private EnemyState myEnemyState;
 	private NavMeshAgent myNavMeshAgent;
-	private GameObject myPlayerRef;
+	private PlayerState myPlayerState;
 	private int patrolPointIndex;
 	private float myFollowingPlayerTimer;
 	private bool isFollowingPlayer;
 
-	void Start () {
+	public void Start () {
+		myEnemyState = gameObject.GetComponent<EnemyState> ();
 		myNavMeshAgent = gameObject.GetComponent<NavMeshAgent> ();
-		myPlayerRef = GameObject.Find ("Player");
+		myPlayerState = GameObject.Find ("Player").GetComponent<PlayerState>();
 		patrolPointIndex = 0;
 		isFollowingPlayer = false;
 
@@ -25,23 +27,25 @@ public class EnemyMovement : MonoBehaviour {
 			patrolPoints = GameObject.FindGameObjectsWithTag ("PatrolPoint");
 		}
 	}
-	
 
-	void Update () {
+	public void FixedUpdate () {
+		if (myEnemyState.isAlive) {
+			ProcessMovement ();
+		}
+	}
 
-		float distanceFromPlayer = Vector3.Distance (gameObject.transform.position, myPlayerRef.transform.position);
-
-		Debug.LogFormat ("distance from player: {0}", distanceFromPlayer);
+	private void ProcessMovement() {
+		float distanceFromPlayer = Vector3.Distance (gameObject.transform.position, myPlayerState.gameObject.transform.position);
 
 		if (!isFollowingPlayer) {
 
-			if (distanceFromPlayer <= playerDistanceTrigger) {
+			if (distanceFromPlayer <= playerDistanceTrigger && myPlayerState.isAlive) {
 
 				isFollowingPlayer = true;
 				myFollowingPlayerTimer = followingPlayerTimeLength;
 
 			} else {
-				
+
 				myNavMeshAgent.SetDestination (patrolPoints [patrolPointIndex].transform.position);
 
 				if (myNavMeshAgent.remainingDistance < myNavMeshAgent.stoppingDistance) {
@@ -55,8 +59,8 @@ public class EnemyMovement : MonoBehaviour {
 
 		}
 
-		if(isFollowingPlayer) {
-			myNavMeshAgent.SetDestination (myPlayerRef.transform.position);
+		if (isFollowingPlayer) {
+			myNavMeshAgent.SetDestination (myPlayerState.gameObject.transform.position);
 
 			myFollowingPlayerTimer -= Time.deltaTime;
 
