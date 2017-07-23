@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerShoot : MonoBehaviour {
 
 	[SerializeField] private float shootMaxDistance = 500.0f;
-	[SerializeField] private float shootDamage = 10.0f;
+	[SerializeField] private float shootDamage = 1.0f;
 
 	private PlayerState myPlayerState;
 
@@ -19,8 +19,6 @@ public class PlayerShoot : MonoBehaviour {
 			bool hasHit = Physics.Raycast (Camera.main.transform.position, Camera.main.transform.forward, out hitInfo, shootMaxDistance);
 
 			if (hasHit) {
-				Debug.LogFormat ("we hit this: {0}", hitInfo.collider.gameObject.name);
-
 				if (hitInfo.collider.gameObject.tag == "Enemy") {
 					EnemyState enemyState = hitInfo.collider.gameObject.GetComponent<EnemyState> ();
 

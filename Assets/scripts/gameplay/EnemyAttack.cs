@@ -44,8 +44,6 @@ public class EnemyAttack : MonoBehaviour {
 
 		PlayerState playerState = myPlayerRef.GetComponent<PlayerState> ();
 
-		Debug.LogFormat ("Enemy is attacking player , player will take damage: {0}", currentAttackDamage);
-
 		playerState.ReceiveDamage (currentAttackDamage);
 	}
 }
