@@ -6,8 +6,8 @@ using UnityEngine.AI;
 public class EnemyMovement : MonoBehaviour {
 
 	[SerializeField]private GameObject[] patrolPoints;
-	[SerializeField]private float playerDistanceTrigger = 5.0f;
-	[SerializeField]private float followingPlayerTimeLength = 5.0f;
+	[SerializeField]private float playerDistanceTrigger = 10.0f;
+	[SerializeField]private float followingPlayerTimeLength = 10.0f;
 
 	private NavMeshAgent myNavMeshAgent;
 	private GameObject myPlayerRef;
@@ -20,29 +20,42 @@ public class EnemyMovement : MonoBehaviour {
 		myPlayerRef = GameObject.Find ("Player");
 		patrolPointIndex = 0;
 		isFollowingPlayer = false;
+
+		if (patrolPoints.Length == 0) {
+			patrolPoints = GameObject.FindGameObjectsWithTag ("PatrolPoint");
+		}
 	}
 	
 
 	void Update () {
+
 		float distanceFromPlayer = Vector3.Distance (gameObject.transform.position, myPlayerRef.transform.position);
-		if (distanceFromPlayer <= playerDistanceTrigger && isFollowingPlayer == false) {
-			isFollowingPlayer = true;
-			myFollowingPlayerTimer = followingPlayerTimeLength;
 
-		} else {
-			myNavMeshAgent.SetDestination (patrolPoints [patrolPointIndex].transform.position);
+		Debug.LogFormat ("distance from player: {0}", distanceFromPlayer);
 
-			if (myNavMeshAgent.remainingDistance < myNavMeshAgent.stoppingDistance) {
+		if (!isFollowingPlayer) {
 
-				patrolPointIndex++;
+			if (distanceFromPlayer <= playerDistanceTrigger) {
 
-				if (patrolPointIndex >= patrolPoints.Length)
-					patrolPointIndex = 0;
+				isFollowingPlayer = true;
+				myFollowingPlayerTimer = followingPlayerTimeLength;
+
+			} else {
+				
+				myNavMeshAgent.SetDestination (patrolPoints [patrolPointIndex].transform.position);
+
+				if (myNavMeshAgent.remainingDistance < myNavMeshAgent.stoppingDistance) {
+
+					patrolPointIndex++;
+
+					if (patrolPointIndex >= patrolPoints.Length)
+						patrolPointIndex = 0;
+				}
 			}
+
 		}
 
-
-		if (isFollowingPlayer) {
+		if(isFollowingPlayer) {
 			myNavMeshAgent.SetDestination (myPlayerRef.transform.position);
 
 			myFollowingPlayerTimer -= Time.deltaTime;
