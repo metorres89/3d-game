@@ -24,5 +24,7 @@ public class ShowEnemyStats : MonoBehaviour {
 	public void UpdateHealthBar(float currentHP, float initialHP){
 		float newWidth = currentHP * originalHPBarSize.x / initialHP;
 		myCurrentHealth.rectTransform.sizeDelta = new Vector2 (newWidth, originalHPBarSize.y);
+
+		myCanvas.enabled = currentHP > 0.0f;
 	}
 }

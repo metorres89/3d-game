@@ -15,6 +15,7 @@ public class EnemyMovement : MonoBehaviour {
 	private int patrolPointIndex;
 	private float myFollowingPlayerTimer;
 	private bool isFollowingPlayer;
+	private float walkAnimationSpeed;
 
 	public void Start () {
 		myEnemyState = gameObject.GetComponent<EnemyState> ();
@@ -26,12 +27,19 @@ public class EnemyMovement : MonoBehaviour {
 		if (patrolPoints.Length == 0) {
 			patrolPoints = GameObject.FindGameObjectsWithTag ("PatrolPoint");
 		}
+
+		walkAnimationSpeed = myNavMeshAgent.speed;
 	}
 
 	public void FixedUpdate () {
-		if (myEnemyState.isAlive && (myEnemyState.GetCurrentState() == EnemyState.StateType.WALK || myEnemyState.GetCurrentState() == EnemyState.StateType.IDLE)) {
+
+		//while enemy is alive navigation will control movement
+		myNavMeshAgent.enabled = myEnemyState.isAlive;
+
+		if (myNavMeshAgent.enabled && myEnemyState.isAttacking == false) {
 			ProcessMovement (Time.fixedDeltaTime);
 		}
+
 	}
 
 	private void ProcessMovement( float deltaTime ) {
@@ -71,6 +79,7 @@ public class EnemyMovement : MonoBehaviour {
 			}
 		}
 
-		myEnemyState.SetState (EnemyState.StateType.WALK);
+		//myEnemyState.TriggerAnimation (walkAnimationSpeed >= 5.0f ? "run" : "walk", walkAnimationSpeed);
+		myEnemyState.TriggerAnimation("run", 1.0f);
 	}
 }

@@ -11,13 +11,13 @@ public class EnemyAttack : MonoBehaviour {
 	private GameObject myPlayerRef;
 	private EnemyState myEnemyState;
 
-	public float attackDelay = 1.0f;
+	public float attackSpeed = 1.0f;
 
 	// Use this for initialization
 	void Start () {
 		myPlayerRef = GameObject.FindGameObjectWithTag ("Player");
 		myEnemyState = gameObject.GetComponent<EnemyState> ();
-		attackTimer = attackDelay;
+		attackTimer = attackSpeed;
 	}
 	
 	public void FixedUpdate () {
@@ -29,18 +29,15 @@ public class EnemyAttack : MonoBehaviour {
 			if (distanceFromPlayer <= playerDistanceAttackTrigger) {
 
 				attackTimer -= Time.fixedDeltaTime;
-
-				myEnemyState.SetState (EnemyState.StateType.ATTACK);
-
+				myEnemyState.isAttacking = true;
+				myEnemyState.TriggerAnimation ("attack", attackSpeed);
 				if (attackTimer <= 0.0f) {
-					
-					Debug.Log ("triggering attack animation!!!");
 					Attack ();
-					attackTimer = attackDelay;
+					attackTimer = attackSpeed;
 				}
 
 			} else {
-				myEnemyState.SetState (EnemyState.StateType.WALK);
+				myEnemyState.isAttacking = false;
 			}
 		}
 	}

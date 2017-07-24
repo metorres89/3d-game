@@ -4,32 +4,28 @@ using UnityEngine;
 
 public class EnemyState : MonoBehaviour {
 
-	public enum StateType
-	{
-		IDLE,
-		WALK,
-		ATTACK,
-		DEAD
-	}
-
 	private float healthPoints = 100.0f;
 	private Animator myAnimator;
 	private ShowEnemyStats myShowEnemyStats;
+	private CapsuleCollider myCapsuleCollider;
 
 	public float initialHealthPoints = 100.0f;
 	public bool isAlive;
-	private StateType currentState;
+	public bool isAttacking;
+
+	public GameObject animatorOwner;
 
 	public void Start () {
 		healthPoints = initialHealthPoints;
 
 		myShowEnemyStats = gameObject.GetComponent<ShowEnemyStats> ();
 
-		myAnimator = gameObject.transform.Find ("z@walk").GetComponent<Animator> ();
+		myAnimator = animatorOwner.GetComponent<Animator> ();
+
+		myCapsuleCollider = gameObject.GetComponent<CapsuleCollider> ();
 
 		isAlive = true;
-
-		SetState (StateType.IDLE);
+		isAttacking = false;
 	}
 
 	public void ReceiveDamage(float damage) {
@@ -44,10 +40,9 @@ public class EnemyState : MonoBehaviour {
 
 			isAlive = false;
 
-			//Destroy (gameObject);
+			TriggerAnimation ("dead", 1.0f);
 
-			//TriggerAnimation("back_fall");
-			SetState(StateType.DEAD);
+			myCapsuleCollider.enabled = false;
 		}
 	}
 
@@ -55,36 +50,23 @@ public class EnemyState : MonoBehaviour {
 		return healthPoints;
 	}
 
-	public void SetState (StateType newState)
-	{
-		if (newState != currentState) {
+	public void TriggerAnimation(string triggerName, float animationSpeed){
 
-			currentState = newState;
+		int animatorDefaultLayer = 0;
 
-			string triggerName = "";
+		string animatorLayerName = myAnimator.GetLayerName (animatorDefaultLayer);
 
-			switch (currentState)
-			{
-			case StateType.IDLE:
-				triggerName = "walk";
-				break;
-			case StateType.WALK:
-				triggerName = "walk";
-				break;
-			case StateType.ATTACK:
-				triggerName = "attack";
-				break;
-			case StateType.DEAD:
-				//back_fall , left_fall, right_fall
-				triggerName = "back_fall";
-				break;
-			}
+		AnimatorStateInfo stateInfo = myAnimator.GetCurrentAnimatorStateInfo (animatorDefaultLayer);
 
+		string stateInfoName = string.Format ("{0}.{1}", animatorLayerName, triggerName);
+
+		//Debug.Log (stateInfoName);
+
+		if (!stateInfo.IsName (stateInfoName)) {
+			//Debug.LogFormat ("myAnimator.SetTrigger:{0} myAnimator.speed:{1}", triggerName, animationSpeed);
+
+			myAnimator.speed = animationSpeed;
 			myAnimator.SetTrigger (triggerName);
 		}
-	}
-
-	public StateType GetCurrentState () {
-		return currentState;
 	}
 }
