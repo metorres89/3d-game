@@ -23,18 +23,25 @@ public class EnemyAttack : MonoBehaviour {
 	public void FixedUpdate () {
 		
 		if (myEnemyState.isAlive) {
+			
 			float distanceFromPlayer = Vector3.Distance (gameObject.transform.position, myPlayerRef.transform.position);
 
 			if (distanceFromPlayer <= playerDistanceAttackTrigger) {
 
 				attackTimer -= Time.fixedDeltaTime;
 
+				myEnemyState.SetState (EnemyState.StateType.ATTACK);
+
 				if (attackTimer <= 0.0f) {
+					
+					Debug.Log ("triggering attack animation!!!");
 					Attack ();
 					attackTimer = attackDelay;
 				}
 
-			} 	
+			} else {
+				myEnemyState.SetState (EnemyState.StateType.WALK);
+			}
 		}
 	}
 

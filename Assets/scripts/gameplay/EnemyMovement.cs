@@ -29,12 +29,12 @@ public class EnemyMovement : MonoBehaviour {
 	}
 
 	public void FixedUpdate () {
-		if (myEnemyState.isAlive) {
-			ProcessMovement ();
+		if (myEnemyState.isAlive && (myEnemyState.GetCurrentState() == EnemyState.StateType.WALK || myEnemyState.GetCurrentState() == EnemyState.StateType.IDLE)) {
+			ProcessMovement (Time.fixedDeltaTime);
 		}
 	}
 
-	private void ProcessMovement() {
+	private void ProcessMovement( float deltaTime ) {
 		float distanceFromPlayer = Vector3.Distance (gameObject.transform.position, myPlayerState.gameObject.transform.position);
 
 		//Debug.LogFormat ("distanceFromPlayer: {0}", distanceFromPlayer);
@@ -49,7 +49,7 @@ public class EnemyMovement : MonoBehaviour {
 		if (!isFollowingPlayer) {
 			
 				myNavMeshAgent.SetDestination (patrolPoints [patrolPointIndex].transform.position);
-
+				
 				if (myNavMeshAgent.remainingDistance < myNavMeshAgent.stoppingDistance) {
 
 					patrolPointIndex++;
@@ -59,12 +59,18 @@ public class EnemyMovement : MonoBehaviour {
 				}
 		} else {
 			
-			myNavMeshAgent.SetDestination (myPlayerState.gameObject.transform.position);
+			if (myPlayerState.isAlive) {
 
-			myFollowingPlayerTimer -= Time.fixedDeltaTime;
-
-			if (myFollowingPlayerTimer <= 0.0f)
+				myNavMeshAgent.SetDestination (myPlayerState.gameObject.transform.position);
+				myFollowingPlayerTimer -= deltaTime;
+				if (myFollowingPlayerTimer <= 0.0f)
+					isFollowingPlayer = false;
+			
+			} else {
 				isFollowingPlayer = false;
+			}
 		}
+
+		myEnemyState.SetState (EnemyState.StateType.WALK);
 	}
 }
