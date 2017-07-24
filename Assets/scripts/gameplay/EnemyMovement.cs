@@ -79,7 +79,7 @@ public class EnemyMovement : MonoBehaviour {
 			}
 		}
 
-		//myEnemyState.TriggerAnimation (walkAnimationSpeed >= 5.0f ? "run" : "walk", walkAnimationSpeed);
-		myEnemyState.TriggerAnimation("run", 1.0f);
+		myEnemyState.TriggerAnimation (walkAnimationSpeed >= 5.0f ? "run" : "walk", walkAnimationSpeed);
+		//myEnemyState.TriggerAnimation("run", 1.0f);
 	}
 }
