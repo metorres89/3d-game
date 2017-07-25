@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof (EnemyState))]
 public class EnemyMovement : MonoBehaviour {
 
 	[SerializeField]private GameObject[] patrolPoints;

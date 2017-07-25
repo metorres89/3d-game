@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof (PlayerState))]
 public class PlayerShoot : MonoBehaviour {
 
 	[SerializeField] private float shootMaxDistance = 500.0f;

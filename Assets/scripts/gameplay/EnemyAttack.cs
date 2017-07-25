@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof (EnemyState))]
 public class EnemyAttack : MonoBehaviour {
 	[SerializeField] private float minDamage = 10.0f;
 	[SerializeField] private float maxDamage = 30.0f;

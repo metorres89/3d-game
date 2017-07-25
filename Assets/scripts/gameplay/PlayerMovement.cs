@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof (Rigidbody))]
 [RequireComponent(typeof (CapsuleCollider))]
-
+[RequireComponent(typeof (PlayerState))]
 public class PlayerMovement : MonoBehaviour {
 
 	[SerializeField] private float walkSpeed = 10.0f;
