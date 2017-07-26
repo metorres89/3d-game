@@ -3,22 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof (PlayerState))]
+[RequireComponent(typeof (PlayerShoot))]
 public class HUDState : MonoBehaviour {
 
 	private PlayerState myPlayerState;
+	private PlayerShoot myPlayerShoot;
 	private Text lifeLabel;
+	private Text ammoLabel;
 
-	// Use this for initialization
 	void Start () {
-		myPlayerState = GameObject.FindWithTag ("Player").GetComponent<PlayerState> ();
-	
+		GameObject goPlayer = GameObject.FindWithTag ("Player");
+		myPlayerState = goPlayer.GetComponent<PlayerState> ();
+		myPlayerShoot = goPlayer.GetComponent<PlayerShoot> ();
 		lifeLabel = gameObject.transform.Find ("LifeLabel").GetComponent<Text> ();
+		ammoLabel = gameObject.transform.Find ("AmmoLabel").GetComponent<Text> ();
 	}
-	
-	// Update is called once per frame
+
 	void Update () {
-
 		lifeLabel.text = string.Format ("Life: {0}", myPlayerState.GetHealthPoints ());
-
+		ammoLabel.text = string.Format("Ammo: {0} / {1} - {2}", myPlayerShoot.GetCurrentAmmo(), myPlayerShoot.GetTotalAmmoPerPack(), myPlayerShoot.GetRemainingAmmoPacks());
 	}
 }
