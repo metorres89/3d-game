@@ -13,7 +13,8 @@ public class PlayerState : MonoBehaviour {
 	}
 
 	public void RestoreHealthPoints(float amount) {
-		currentHealthPoints += Mathf.Clamp (amount, 0, initialHealthPoints);
+		if( amount > 0.0f)
+			currentHealthPoints = Mathf.Clamp (currentHealthPoints + amount, 0, initialHealthPoints);
 	}
 
 	public void Start() {
