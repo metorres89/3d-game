@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof (PlayerState))]
-[RequireComponent(typeof (PlayerShoot))]
 public class HUDState : MonoBehaviour {
 
 	private PlayerState myPlayerState;

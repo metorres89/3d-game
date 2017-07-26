@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyState : MonoBehaviour {
 
-	private float healthPoints = 100.0f;
+	private float currentHealthPoints = 100.0f;
 	private Animator myAnimator;
 	private ShowEnemyStats myShowEnemyStats;
 	private CapsuleCollider myCapsuleCollider;
@@ -16,7 +16,7 @@ public class EnemyState : MonoBehaviour {
 	public GameObject animatorOwner;
 
 	public void Start () {
-		healthPoints = initialHealthPoints;
+		currentHealthPoints = initialHealthPoints;
 
 		myShowEnemyStats = gameObject.GetComponent<ShowEnemyStats> ();
 
@@ -29,13 +29,13 @@ public class EnemyState : MonoBehaviour {
 	}
 
 	public void ReceiveDamage(float damage) {
-		healthPoints -= damage;
+		currentHealthPoints -= damage;
 
-		healthPoints = Mathf.Clamp (healthPoints, 0.0f, initialHealthPoints);
+		currentHealthPoints = Mathf.Clamp (currentHealthPoints, 0.0f, initialHealthPoints);
 
-		myShowEnemyStats.UpdateHealthBar (healthPoints, initialHealthPoints);
+		myShowEnemyStats.UpdateHealthBar (currentHealthPoints, initialHealthPoints);
 
-		if (healthPoints == 0.0f) {
+		if (currentHealthPoints == 0.0f) {
 			Debug.Log ("Enemy is Dead!");
 
 			isAlive = false;
@@ -47,7 +47,7 @@ public class EnemyState : MonoBehaviour {
 	}
 
 	public float GetHealthPoints(){
-		return healthPoints;
+		return currentHealthPoints;
 	}
 
 	public void TriggerAnimation(string triggerName, float animationSpeed){
