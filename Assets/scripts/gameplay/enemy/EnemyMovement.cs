@@ -4,11 +4,15 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof (EnemyState))]
+[RequireComponent(typeof(NavMeshAgent))]
 public class EnemyMovement : MonoBehaviour {
 
-	[SerializeField]private GameObject[] patrolPoints;
-	[SerializeField]private float playerDistanceTrigger = 10.0f;
-	[SerializeField]private float followingPlayerTimeLength = 10.0f;
+	[SerializeField] private GameObject[] patrolPoints;
+	[SerializeField] private float playerDistanceTrigger = 10.0f;
+	[SerializeField] private float followingPlayerTimeLength = 10.0f;
+	[SerializeField] private float walkSpeed = 1.0f;
+	[SerializeField] private float runSpeed = 3.0f;
+	[SerializeField] private bool syncNavMeshSpeedAndAnimationSpeed = false;
 
 	private EnemyState myEnemyState;
 	private NavMeshAgent myNavMeshAgent;
@@ -16,7 +20,6 @@ public class EnemyMovement : MonoBehaviour {
 	private int patrolPointIndex;
 	private float myFollowingPlayerTimer;
 	private bool isFollowingPlayer;
-	private float walkAnimationSpeed;
 
 	public void Start () {
 		myEnemyState = gameObject.GetComponent<EnemyState> ();
@@ -29,7 +32,8 @@ public class EnemyMovement : MonoBehaviour {
 			patrolPoints = GameObject.FindGameObjectsWithTag ("PatrolPoint");
 		}
 
-		walkAnimationSpeed = myNavMeshAgent.speed;
+		//by default navmesh speed is walking speed
+		myNavMeshAgent.speed = walkSpeed;
 	}
 
 	public void FixedUpdate () {
@@ -49,37 +53,48 @@ public class EnemyMovement : MonoBehaviour {
 		//Debug.LogFormat ("distanceFromPlayer: {0}", distanceFromPlayer);
 
 		if (distanceFromPlayer <= playerDistanceTrigger && myPlayerState.isAlive) {
-
-			isFollowingPlayer = true;
-			myFollowingPlayerTimer = followingPlayerTimeLength;
-
+			SetPlayerAsDestination ();
 		}
 
-		if (!isFollowingPlayer) {
-			
-				myNavMeshAgent.SetDestination (patrolPoints [patrolPointIndex].transform.position);
-				
-				if (myNavMeshAgent.remainingDistance < myNavMeshAgent.stoppingDistance) {
-
-					patrolPointIndex++;
-
-					if (patrolPointIndex >= patrolPoints.Length)
-						patrolPointIndex = 0;
-				}
+		if (isFollowingPlayer) {
+			FollowPlayer (deltaTime);
 		} else {
-			
-			if (myPlayerState.isAlive) {
-
-				myNavMeshAgent.SetDestination (myPlayerState.gameObject.transform.position);
-				myFollowingPlayerTimer -= deltaTime;
-				if (myFollowingPlayerTimer <= 0.0f)
-					isFollowingPlayer = false;
-			
-			} else {
-				isFollowingPlayer = false;
-			}
+			FollowPatrolPoints ();
 		}
 
-		myEnemyState.TriggerAnimation (walkAnimationSpeed >= 5.0f ? "run" : "walk", walkAnimationSpeed);
+		float animationSpeed = syncNavMeshSpeedAndAnimationSpeed ? myNavMeshAgent.speed : 1.0f;
+		string animationTrigger = myNavMeshAgent.speed == runSpeed ? "run" : "walk";
+		myEnemyState.TriggerAnimation (animationTrigger, animationSpeed);
+	}
+
+	public void SetPlayerAsDestination() {
+		isFollowingPlayer = true;
+		myFollowingPlayerTimer = followingPlayerTimeLength;
+	}
+
+	private void FollowPatrolPoints() {
+		myNavMeshAgent.speed = walkSpeed;
+		myNavMeshAgent.SetDestination (patrolPoints [patrolPointIndex].transform.position);
+
+		if (myNavMeshAgent.remainingDistance < myNavMeshAgent.stoppingDistance) {
+
+			patrolPointIndex++;
+
+			if (patrolPointIndex >= patrolPoints.Length)
+				patrolPointIndex = 0;
+		}
+	}
+
+	private void FollowPlayer(float deltaTime) {
+		if (myPlayerState.isAlive) {
+			myNavMeshAgent.speed = runSpeed;
+			myNavMeshAgent.SetDestination (myPlayerState.gameObject.transform.position);
+			myFollowingPlayerTimer -= deltaTime;
+			if (myFollowingPlayerTimer <= 0.0f)
+				isFollowingPlayer = false;
+
+		} else {
+			isFollowingPlayer = false;
+		}
 	}
 }

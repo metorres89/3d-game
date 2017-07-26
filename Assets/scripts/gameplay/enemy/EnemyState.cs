@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof (CapsuleCollider))]
 public class EnemyState : MonoBehaviour {
 
 	private float currentHealthPoints = 100.0f;

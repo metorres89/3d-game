@@ -63,7 +63,10 @@ public class PlayerShoot : MonoBehaviour {
 			if (hasHit) {
 				if (hitInfo.collider.gameObject.tag == "Enemy") {
 					EnemyState enemyState = hitInfo.collider.gameObject.GetComponent<EnemyState> ();
+					EnemyMovement enemyMovement = hitInfo.collider.gameObject.GetComponent<EnemyMovement> ();
+
 					enemyState.ReceiveDamage (shootDamage);
+					enemyMovement.SetPlayerAsDestination ();
 				}
 			}
 
