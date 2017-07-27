@@ -61,7 +61,9 @@ public class PlayerShoot : MonoBehaviour {
 			bool hasHit = Physics.Raycast (Camera.main.transform.position, Camera.main.transform.forward, out hitInfo, shootMaxDistance);
 
 			if (hasHit) {
+				
 				if (hitInfo.collider.gameObject.tag == "Enemy") {
+					
 					EnemyState enemyState = hitInfo.collider.gameObject.GetComponent<EnemyState> ();
 					EnemyMovement enemyMovement = hitInfo.collider.gameObject.GetComponent<EnemyMovement> ();
 

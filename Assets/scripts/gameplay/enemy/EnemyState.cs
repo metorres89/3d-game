@@ -9,8 +9,7 @@ public class EnemyState : MonoBehaviour {
 	private Animator myAnimator;
 	private ShowEnemyStats myShowEnemyStats;
 	private CapsuleCollider myCapsuleCollider;
-
-	public float initialHealthPoints = 100.0f;
+	[SerializeField]private float initialHealthPoints = 100.0f;
 	public bool isAlive;
 	public bool isAttacking;
 
