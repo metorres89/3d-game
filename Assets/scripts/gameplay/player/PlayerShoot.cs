@@ -78,10 +78,18 @@ public class PlayerShoot : MonoBehaviour {
 	}
 
 	public IEnumerator ReloadGun(float delay) {
-		currentAmmo += (totalAmmoPerPack - currentAmmo);
-		remainingAmmoPacks--;
+
 		reloadingGun = true;
-		yield return new WaitForSeconds (delay);
+
+		remainingAmmoPacks--;
+
+		float delayPerBullet = (delay / totalAmmoPerPack);
+
+		while(currentAmmo < totalAmmoPerPack) {
+			currentAmmo++; //+= (totalAmmoPerPack - currentAmmo);
+			yield return new WaitForSeconds (delayPerBullet);
+		}
+
 		reloadingGun = false;
 	}
 }

@@ -7,12 +7,12 @@ public class EnemyAttack : MonoBehaviour {
 	[SerializeField] private float minDamage = 10.0f;
 	[SerializeField] private float maxDamage = 30.0f;
 	[SerializeField] private float playerDistanceAttackTrigger = 2.0f;
-	[SerializeField] private float attackTimer = 1.0f;
+	[SerializeField] private float attackSpeed = 1.0f;
 
 	private GameObject myPlayerRef;
 	private EnemyState myEnemyState;
+	private float attackTimer = 1.0f;
 
-	public float attackSpeed = 1.0f;
 
 	// Use this for initialization
 	void Start () {
@@ -29,6 +29,8 @@ public class EnemyAttack : MonoBehaviour {
 
 			if (distanceFromPlayer <= playerDistanceAttackTrigger) {
 
+				gameObject.transform.LookAt (myPlayerRef.transform.position);
+
 				attackTimer -= Time.fixedDeltaTime;
 				myEnemyState.isAttacking = true;
 				myEnemyState.TriggerAnimation ("attack", attackSpeed);
@@ -44,11 +46,18 @@ public class EnemyAttack : MonoBehaviour {
 	}
 
 	private void Attack() {
+		RaycastHit hitInfo;
+		bool hasHit = Physics.Raycast (gameObject.transform.position, gameObject.transform.forward, out hitInfo, playerDistanceAttackTrigger);
 
-		float currentAttackDamage = Random.Range (minDamage, maxDamage);
+		if (hasHit) {
 
-		PlayerState playerState = myPlayerRef.GetComponent<PlayerState> ();
+			Debug.LogFormat ("El enemigo goleó a algo!: {0}", hitInfo.collider.gameObject.tag);
 
-		playerState.ReceiveDamage (currentAttackDamage);
+			if (hitInfo.collider.gameObject.tag == "Player") {
+				float currentAttackDamage = Random.Range (minDamage, maxDamage);
+				PlayerState playerState = myPlayerRef.GetComponent<PlayerState> ();
+				playerState.ReceiveDamage (currentAttackDamage);
+			}
+		}
 	}
 }
