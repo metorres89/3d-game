@@ -8,13 +8,12 @@ public class EnemyAttack : MonoBehaviour {
 	[SerializeField] private float maxDamage = 30.0f;
 	[SerializeField] private float playerDistanceAttackTrigger = 2.0f;
 	[SerializeField] private float attackSpeed = 1.0f;
+	[SerializeField] private float attackForce = 0.0f;
 
 	private GameObject myPlayerRef;
 	private EnemyState myEnemyState;
 	private float attackTimer = 1.0f;
 
-
-	// Use this for initialization
 	void Start () {
 		myPlayerRef = GameObject.FindGameObjectWithTag ("Player");
 		myEnemyState = gameObject.GetComponent<EnemyState> ();
@@ -57,6 +56,14 @@ public class EnemyAttack : MonoBehaviour {
 				float currentAttackDamage = Random.Range (minDamage, maxDamage);
 				PlayerState playerState = myPlayerRef.GetComponent<PlayerState> ();
 				playerState.ReceiveDamage (currentAttackDamage);
+
+				if (attackForce > 0.0f) {
+					Vector3 impact = gameObject.transform.forward * attackForce;
+					impact.y = 100;
+
+					PlayerMovement playerMovement = myPlayerRef.GetComponent<PlayerMovement> ();
+					playerMovement.ReceiveForce (impact);
+				}
 			}
 		}
 	}

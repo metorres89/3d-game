@@ -14,10 +14,12 @@ public class PlayerMovement : MonoBehaviour {
 	[SerializeField] private float verticalRotationMin = -90.0f;
 	[SerializeField] private float verticalRotationMax = 90.0f;
 	[SerializeField] private bool isOnGround = false;
+	[SerializeField] private float stunRecoveryTime = 1.0f;
 
 	private PlayerState myPlayerState;
 	private Rigidbody myRigidbody;
 	private CapsuleCollider myCapsuleCollider;
+	private bool onStun;
 
 	void Start () {
 		myPlayerState = gameObject.GetComponent<PlayerState> ();
@@ -26,13 +28,15 @@ public class PlayerMovement : MonoBehaviour {
 
 		Cursor.visible = false;
 		Cursor.lockState = CursorLockMode.Locked;
+
+		onStun = false;
 	}
 
 	void FixedUpdate () {
 
 		CheckIfGrounded ();
 
-		if (myPlayerState.isAlive) {
+		if (myPlayerState.isAlive && onStun == false) {
 			ProcessWalkMovement ();
 			ProcessJump ();
 		}
@@ -62,6 +66,7 @@ public class PlayerMovement : MonoBehaviour {
 		float finalSpeed = fire3Axis > 0.0f ? runningSpeed : walkSpeed;
 
 		myRigidbody.velocity = (transform.forward * verticalAxis * finalSpeed) + (transform.right * horizontalAxis * finalSpeed) + gravityAcceleration;
+
 	}
 
 	private void ProcessJump(){
@@ -103,5 +108,17 @@ public class PlayerMovement : MonoBehaviour {
 		q.x = Mathf.Tan (0.5f * Mathf.Deg2Rad * angleX);
 
 		return q;
+	}
+
+	public void ReceiveForce(Vector3 force) {
+		onStun = true;
+		myRigidbody.AddForce (force);
+		StopCoroutine (RecoverFromStun());
+		StartCoroutine (RecoverFromStun());
+	}
+
+	public IEnumerator RecoverFromStun() {
+		yield return new WaitForSeconds (stunRecoveryTime);
+		onStun = false;
 	}
 }
