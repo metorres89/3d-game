@@ -9,7 +9,11 @@ public class EnemyState : MonoBehaviour {
 	private Animator myAnimator;
 	private ShowEnemyStats myShowEnemyStats;
 	private CapsuleCollider myCapsuleCollider;
+	private bool enemiesAlerted;
+
 	[SerializeField]private float initialHealthPoints = 100.0f;
+	[SerializeField] private float alertOtherEnemiesRadius = 10.0f;
+
 	public bool isAlive;
 	public bool isAttacking;
 
@@ -26,6 +30,8 @@ public class EnemyState : MonoBehaviour {
 
 		isAlive = true;
 		isAttacking = false;
+
+		enemiesAlerted = false;
 	}
 
 	public void ReceiveDamage(float damage) {
@@ -43,6 +49,22 @@ public class EnemyState : MonoBehaviour {
 			TriggerAnimation ("dead", 1.0f);
 
 			myCapsuleCollider.enabled = false;
+		}
+
+		AlertNearEnemiesWhenReceiveDamage ();
+	}
+
+	private void AlertNearEnemiesWhenReceiveDamage() {
+		if (enemiesAlerted == false && alertOtherEnemiesRadius > 0.0f) {
+
+			enemiesAlerted = true;
+
+			int bitMask = 1 << LayerMask.NameToLayer ("Enemy");
+			Collider[] enemiesToAlert = Physics.OverlapSphere (gameObject.transform.position, alertOtherEnemiesRadius, bitMask);
+
+			foreach (Collider enemy in enemiesToAlert) {
+				enemy.gameObject.GetComponent<EnemyMovement> ().SetPlayerAsDestination ();
+			}
 		}
 	}
 
@@ -68,5 +90,10 @@ public class EnemyState : MonoBehaviour {
 			myAnimator.speed = animationSpeed;
 			myAnimator.SetTrigger (triggerName);
 		}
+	}
+
+	public void SetEnemiesAlerted(bool state)
+	{
+		enemiesAlerted = state;
 	}
 }

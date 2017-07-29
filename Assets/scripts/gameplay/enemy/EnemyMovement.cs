@@ -54,6 +54,8 @@ public class EnemyMovement : MonoBehaviour {
 
 		if (distanceFromPlayer <= playerDistanceTrigger && myPlayerState.isAlive) {
 			SetPlayerAsDestination ();
+		} else {
+			myEnemyState.SetEnemiesAlerted (false);
 		}
 
 		if (isFollowingPlayer) {
