@@ -5,6 +5,9 @@ using UnityEngine;
 public class PlayerState : MonoBehaviour {
 
 	[SerializeField] private float currentHealthPoints = 100.0f;
+
+	private ScoreData myScoreData;
+
 	public float initialHealthPoints = 100.0f;
 	public bool isAlive = true;
 
@@ -19,6 +22,9 @@ public class PlayerState : MonoBehaviour {
 
 	public void Start() {
 		currentHealthPoints = initialHealthPoints;
+		int totalEnemies = GameObject.FindGameObjectsWithTag ("Enemy").Length;
+		int totalHostages = GameObject.FindGameObjectsWithTag ("Hostage").Length;
+		myScoreData = new ScoreData (totalEnemies, totalHostages);
 	}
 
 	public void ReceiveDamage(float damage) {
@@ -30,5 +36,9 @@ public class PlayerState : MonoBehaviour {
 			Debug.Log ("GAME OVER!");
 			isAlive = false;
 		}
+	}
+
+	public ScoreData GetScoreData() {
+		return myScoreData;
 	}
 }
