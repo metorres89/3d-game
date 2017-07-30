@@ -8,6 +8,7 @@ using UnityEngine.AI;
 public class HostageMovement : MonoBehaviour {
 
 	[SerializeField] private float walkSpeed = 3.0f;
+	[SerializeField] private float runSpeed = 6.0f;
 	[SerializeField] private float triggeringDistanceFromRescueArea = 5.0f;
 
 	private HostageState myHostageState;
@@ -41,9 +42,16 @@ public class HostageMovement : MonoBehaviour {
 		float distanceFromRescueArea = Vector3.Distance (gameObject.transform.position, rescueArea.transform.position);
 
 		if (distanceFromRescueArea <= triggeringDistanceFromRescueArea) {
+			if (myNavMeshAgent.speed != runSpeed)
+				myNavMeshAgent.speed = runSpeed;
+			
 			myNavMeshAgent.SetDestination (rescueArea.transform.position);
 		} else {
 			if (myPlayerState.isAlive) {
+
+				if (myNavMeshAgent.speed != walkSpeed)
+					myNavMeshAgent.speed = walkSpeed;
+
 				myNavMeshAgent.SetDestination (myPlayerState.gameObject.transform.position);
 			}
 		}

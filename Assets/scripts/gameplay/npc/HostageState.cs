@@ -44,12 +44,9 @@ public class HostageState : MonoBehaviour {
 	}
 		
 	public void OnTriggerStay(Collider col) {
-
 		Debug.Log ("OnTriggerStay HostageState!!!");
-
 		if (col.tag == "Player" && myPlayerState.isAlive) {
 			if (Input.GetAxis ("ActiveObject") != 0.0f) {
-				Debug.Log ("hostage change state to bein rescued by player!!!");
 				state = StateType.BEING_RESCUED_BY_PLAYER;
 			}
 		}
