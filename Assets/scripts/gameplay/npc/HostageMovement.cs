@@ -38,7 +38,6 @@ public class HostageMovement : MonoBehaviour {
 	}
 
 	private void ProcessMovement( float deltaTime ) {
-
 		float distanceFromRescueArea = Vector3.Distance (gameObject.transform.position, rescueArea.transform.position);
 
 		if (distanceFromRescueArea <= triggeringDistanceFromRescueArea) {
@@ -55,5 +54,9 @@ public class HostageMovement : MonoBehaviour {
 				myNavMeshAgent.SetDestination (myPlayerState.gameObject.transform.position);
 			}
 		}
+	}
+
+	public Vector3 GetVelocity(){
+		return myNavMeshAgent.velocity;
 	}
 }
