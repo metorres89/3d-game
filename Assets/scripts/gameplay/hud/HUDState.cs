@@ -23,7 +23,8 @@ public class HUDState : MonoBehaviour {
 	}
 
 	void Update () {
-		lifeLabel.text = string.Format ("Life: {0}", myPlayerState.GetHealthPoints ());
+		
+		lifeLabel.text = string.Format ("Life: {0}", myPlayerState.GetHealthPoints ().ToString("F"));
 		ammoLabel.text = string.Format("{0} / {1} - {2}", myPlayerShoot.GetCurrentAmmo(), myPlayerShoot.GetTotalAmmoPerPack(), myPlayerShoot.GetRemainingAmmoPacks());
 		enemiesKilledLabel.text = string.Format ("{0} / {1}", myPlayerState.GetScoreData().killedEnemies, myPlayerState.GetScoreData().totalEnemies );
 		rescuedHostagesLabel.text = string.Format ("{0} / {1}", myPlayerState.GetScoreData().rescuedHostages, myPlayerState.GetScoreData().totalHostages);

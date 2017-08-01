@@ -17,6 +17,8 @@ public class PlayerShoot : MonoBehaviour {
 	private int currentAmmo;
 	private bool reloadingGun;
 
+	public LineRenderer shootLineRenderer;
+
 	public int GetCurrentAmmo(){
 		return currentAmmo;
 	}
@@ -60,8 +62,10 @@ public class PlayerShoot : MonoBehaviour {
 			RaycastHit hitInfo;
 			bool hasHit = Physics.Raycast (Camera.main.transform.position, Camera.main.transform.forward, out hitInfo, shootMaxDistance);
 
+			Vector3 targetPosition;
+
 			if (hasHit) {
-				
+				targetPosition = hitInfo.point;
 				if (hitInfo.collider.gameObject.tag == "Enemy") {
 					
 					EnemyState enemyState = hitInfo.collider.gameObject.GetComponent<EnemyState> ();
@@ -74,7 +78,11 @@ public class PlayerShoot : MonoBehaviour {
 						myPlayerState.GetScoreData ().killedEnemies++;
 					}
 				}
+			} else {
+				targetPosition = Camera.main.transform.forward * shootMaxDistance;
 			}
+
+			StartCoroutine(DrawShootLine (targetPosition, shootRate));
 
 			currentAmmo--;
 			myShootTimer = shootRate;
@@ -97,5 +105,13 @@ public class PlayerShoot : MonoBehaviour {
 		}
 
 		reloadingGun = false;
+	}
+
+	public IEnumerator DrawShootLine(Vector3 target, float delay){
+		shootLineRenderer.enabled = true;
+		shootLineRenderer.SetPosition (0, shootLineRenderer.gameObject.transform.position);
+		shootLineRenderer.SetPosition (1, target);
+		yield return new WaitForSeconds (delay);
+		shootLineRenderer.enabled = false;
 	}
 }
