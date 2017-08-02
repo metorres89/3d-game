@@ -82,7 +82,8 @@ public class PlayerShoot : MonoBehaviour {
 				targetPosition = Camera.main.transform.forward * shootMaxDistance;
 			}
 
-			StartCoroutine(DrawShootLine (targetPosition, shootRate));
+			FXAudio.PlayClip ("fire");
+			StartCoroutine(DrawShootLine (targetPosition, shootRate * 0.5f));
 
 			currentAmmo--;
 			myShootTimer = shootRate;
@@ -94,7 +95,7 @@ public class PlayerShoot : MonoBehaviour {
 	public IEnumerator ReloadGun(float delay) {
 
 		reloadingGun = true;
-
+		FXAudio.PlayClip ("reload");
 		remainingAmmoPacks--;
 
 		float delayPerBullet = (delay / totalAmmoPerPack);

@@ -19,12 +19,14 @@ public class PlayerState : MonoBehaviour {
 		if( amount > 0.0f)
 			currentHealthPoints = Mathf.Clamp (currentHealthPoints + amount, 0, initialHealthPoints);
 	}
-
+		
 	public void Start() {
 		currentHealthPoints = initialHealthPoints;
 		int totalEnemies = GameObject.FindGameObjectsWithTag ("Enemy").Length;
 		int totalHostages = GameObject.FindGameObjectsWithTag ("Hostage").Length;
 		myScoreData = new ScoreData (totalEnemies, totalHostages);
+	
+		FXAudio.Init ();
 	}
 
 	public void ReceiveDamage(float damage) {

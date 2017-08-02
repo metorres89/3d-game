@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour {
 	private Rigidbody myRigidbody;
 	private CapsuleCollider myCapsuleCollider;
 	private bool onStun;
+	private bool jumpAxisInUse;
 
 	void Start () {
 		myPlayerState = gameObject.GetComponent<PlayerState> ();
@@ -30,6 +31,8 @@ public class PlayerMovement : MonoBehaviour {
 		Cursor.lockState = CursorLockMode.Locked;
 
 		onStun = false;
+
+		jumpAxisInUse = false;
 	}
 
 	void FixedUpdate () {
@@ -70,11 +73,16 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	private void ProcessJump(){
+
 		float jumpAxis = Input.GetAxis ("Jump");
 
-		if (jumpAxis != 0.0f && isOnGround == true) {
+		if (jumpAxis != 0.0f && isOnGround == true && jumpAxisInUse == false) {
+			jumpAxisInUse = true;
+			FXAudio.PlayClip ("jump");
 			myRigidbody.AddForce (Vector3.up * jumpForce);
 		}
+
+		jumpAxisInUse = jumpAxis > 0.0f;
 	}
 
 	private void ProcessRotation(){
