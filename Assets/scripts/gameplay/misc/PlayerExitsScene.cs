@@ -21,6 +21,7 @@ public class PlayerExitsScene : MonoBehaviour {
 
 		if (distanceFromPlayer <= minDistanceFromPlayerToExitScene && Input.GetAxis("ActiveObject") != 0.0f) {
 			if ( (GameplayState.AllHostagesHasBeenRescued() && mustRescueAllHostagesToExitScene == true) || (mustRescueAllHostagesToExitScene == false) ) {
+				GameplayState.CurrentState = GameplayState.StateType.WIN;
 				GameResult ();
 			}
 		}

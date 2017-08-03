@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class ResultPanel : MonoBehaviour {
-
+	public Text titleLabel;
 	public Text rescuedHostagesLabel;
 	public Text killedEnemiesLabel;
 	public Text shootPrecisionLabel;
@@ -15,10 +15,18 @@ public class ResultPanel : MonoBehaviour {
 	public Button replayButton;
 
 	public void Start () {
-	
+
+		if (GameplayState.CurrentState == GameplayState.StateType.GAME_OVER) {
+			titleLabel.text = "GAME OVER";
+		} else {
+			titleLabel.text = "VICTORY";
+		}
+
 		rescuedHostagesLabel.text = GameplayState.RescuedHostages.ToString();
 		killedEnemiesLabel.text = GameplayState.KilledEnemies.ToString();
-		shootPrecisionLabel.text = GameplayState.GetShootPrecision ().ToString("F");
+
+		float precisionAsPercent = GameplayState.GetShootPrecision () * 100.0f;
+		shootPrecisionLabel.text = precisionAsPercent.ToString("F");
 		totalShootsLabel.text = GameplayState.TotalShoots.ToString();
 	
 
