@@ -59,6 +59,8 @@ public class PlayerShoot : MonoBehaviour {
 	private void Shoot(float deltaTime) {
 		if (myShootTimer <= 0.0 || myShootTimer == shootRate) {
 
+			GameplayState.TotalShoots++;
+
 			RaycastHit hitInfo;
 			bool hasHit = Physics.Raycast (Camera.main.transform.position, Camera.main.transform.forward, out hitInfo, shootMaxDistance);
 
@@ -75,7 +77,7 @@ public class PlayerShoot : MonoBehaviour {
 					if (enemyState.isAlive) {
 						enemyMovement.SetPlayerAsDestination ();
 					} else {
-						myPlayerState.GetScoreData ().killedEnemies++;
+						GameplayState.KilledEnemies++;
 					}
 				}
 			} else {

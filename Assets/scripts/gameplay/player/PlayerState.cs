@@ -6,7 +6,7 @@ public class PlayerState : MonoBehaviour {
 
 	[SerializeField] private float currentHealthPoints = 100.0f;
 
-	private ScoreData myScoreData;
+	//private ScoreData myScoreData;
 
 	public float initialHealthPoints = 100.0f;
 	public bool isAlive = true;
@@ -21,11 +21,13 @@ public class PlayerState : MonoBehaviour {
 	}
 		
 	public void Start() {
+		
 		currentHealthPoints = initialHealthPoints;
-		int totalEnemies = GameObject.FindGameObjectsWithTag ("Enemy").Length;
-		int totalHostages = GameObject.FindGameObjectsWithTag ("Hostage").Length;
-		myScoreData = new ScoreData (totalEnemies, totalHostages);
-	
+
+		GameplayState.CurrentState = GameplayState.StateType.PLAYING;
+		GameplayState.TotalEnemies = GameObject.FindGameObjectsWithTag ("Enemy").Length;
+		GameplayState.TotalHostages = GameObject.FindGameObjectsWithTag ("Hostage").Length;
+
 		FXAudio.Init ();
 	}
 
@@ -35,12 +37,9 @@ public class PlayerState : MonoBehaviour {
 		currentHealthPoints = Mathf.Clamp (currentHealthPoints, 0.0f, initialHealthPoints);
 
 		if (currentHealthPoints == 0.0f) {
-			Debug.Log ("GAME OVER!");
 			isAlive = false;
-		}
-	}
 
-	public ScoreData GetScoreData() {
-		return myScoreData;
+			GameplayState.CurrentState = GameplayState.StateType.GAME_OVER;
+		}
 	}
 }
