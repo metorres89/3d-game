@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class PlayerExitsScene : MonoBehaviour {
 
+	public bool mustRescueAllHostagesToExitScene = true;
+
 	private PlayerState myPlayerState;
 
 	[SerializeField] private float minDistanceFromPlayerToExitScene = 5.0f;
@@ -18,7 +20,7 @@ public class PlayerExitsScene : MonoBehaviour {
 		float distanceFromPlayer = Vector3.Distance (gameObject.transform.position, myPlayerState.gameObject.transform.position);
 
 		if (distanceFromPlayer <= minDistanceFromPlayerToExitScene && Input.GetAxis("ActiveObject") != 0.0f) {
-			if (GameplayState.AllHostagesHasBeenRescued()) {
+			if ( (GameplayState.AllHostagesHasBeenRescued() && mustRescueAllHostagesToExitScene == true) || (mustRescueAllHostagesToExitScene == false) ) {
 				GameResult ();
 			}
 		}

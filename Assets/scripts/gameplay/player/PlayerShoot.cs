@@ -74,6 +74,9 @@ public class PlayerShoot : MonoBehaviour {
 					EnemyMovement enemyMovement = hitInfo.collider.gameObject.GetComponent<EnemyMovement> ();
 
 					enemyState.ReceiveDamage (shootDamage);
+
+					GameplayState.SuccessShoots++;
+
 					if (enemyState.isAlive) {
 						enemyMovement.SetPlayerAsDestination ();
 					} else {

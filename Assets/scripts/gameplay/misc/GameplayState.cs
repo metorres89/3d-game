@@ -40,6 +40,6 @@ public static class GameplayState
 	}
 
 	public static float GetShootPrecision() {
-		return SuccessShoots / TotalShoots;
+		return TotalShoots > 0.0f ? (SuccessShoots / TotalShoots) : 0.0f;
 	}
 }
