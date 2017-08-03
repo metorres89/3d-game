@@ -32,6 +32,9 @@ public class ResultPanel : MonoBehaviour {
 
 		mainMenuButton.onClick.AddListener (MainMenu);
 		replayButton.onClick.AddListener (Replay);
+
+		Cursor.visible = true;
+		Cursor.lockState = CursorLockMode.None;
 	}
 
 	private void MainMenu() {

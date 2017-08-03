@@ -107,7 +107,7 @@ public class PlayerShoot : MonoBehaviour {
 
 		while(currentAmmo < totalAmmoPerPack) {
 			currentAmmo++; //+= (totalAmmoPerPack - currentAmmo);
-			yield return new WaitForSeconds (delayPerBullet);
+			yield return new WaitForSecondsRealtime (delayPerBullet);
 		}
 
 		reloadingGun = false;
