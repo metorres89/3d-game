@@ -11,14 +11,11 @@ public class PlayerShoot : MonoBehaviour {
 	[SerializeField] int totalAmmoPerPack = 100;
 	[SerializeField] int remainingAmmoPacks = 5;
 	[SerializeField] float reloadGunDelay = 3.0f;
-	/*[SerializeField] GameObject shootImpactPrototype;
-	[SerializeField] int shootImpactMaxPoolSize = 10;*/
 
 	private float myShootTimer;
 	private PlayerState myPlayerState;
 	private int currentAmmo;
 	private bool reloadingGun;
-	/*private ParticleSystem[] shootImpactPool;*/
 
 	public LineRenderer shootLineRenderer;
 
@@ -43,17 +40,11 @@ public class PlayerShoot : MonoBehaviour {
 		myShootTimer = shootRate;
 		currentAmmo = totalAmmoPerPack;
 		reloadingGun = false;
-
-		/*if(shootImpactPrototype != null) {
-			shootImpactPool = new ParticleSystem[shootImpactMaxPoolSize];
-
-			for (int index = 0; index < shootImpactMaxPoolSize; index++) {
-				shootImpactPool [index] = Instantiate (shootImpactPrototype, null).GetComponent<ParticleSystem>();
-			}	
-		}*/
 	}
 
 	public void FixedUpdate () {
+
+		Debug.Log ("fixedDeltaTime:" + Time.fixedDeltaTime);
 
 		if (myPlayerState.isAlive) {
 			
@@ -96,13 +87,6 @@ public class PlayerShoot : MonoBehaviour {
 					}
 				}
 
-				/*if (shootImpactPool.Length > 0) {
-					ParticleSystem currentPS = shootImpactPool [GameplayState.TotalShoots % 10];
-					currentPS.transform.position = hitInfo.point;
-					currentPS.Stop ();
-					currentPS.Play ();
-				}*/
-
 				ParticleSystem currentPS = ParticleSystemManager.GetParticleInstance ("PSShootImpact", GameplayState.TotalShoots);
 				currentPS.transform.position = hitInfo.point;
 				currentPS.Stop ();
@@ -125,15 +109,16 @@ public class PlayerShoot : MonoBehaviour {
 	public IEnumerator ReloadGun(float delay) {
 
 		reloadingGun = true;
+
 		FXAudio.PlayClip ("reload");
+
 		remainingAmmoPacks--;
 
-		float delayPerBullet = (delay / totalAmmoPerPack);
+		int amountToReload = totalAmmoPerPack - currentAmmo;
 
-		while(currentAmmo < totalAmmoPerPack) {
-			currentAmmo++; //+= (totalAmmoPerPack - currentAmmo);
-			yield return new WaitForSecondsRealtime (delayPerBullet);
-		}
+		yield return new WaitForSecondsRealtime (delay);
+
+		currentAmmo += amountToReload;
 
 		reloadingGun = false;
 	}
