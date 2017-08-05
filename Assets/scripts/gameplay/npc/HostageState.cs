@@ -10,21 +10,16 @@ public class HostageState : MonoBehaviour {
 		SAFE
 	};
 
+	public float initialHealthPoints = 100.0f;
+	public bool isAlive = true;
+
 	private float healthPoints;
-	private StateType state;
+	private StateType state = StateType.CAPTIVE;
 	private PlayerState myPlayerState;
 
-	public float initialHealthPoints = 100.0f;
-	public bool isAlive;
-
 	void Start () {
-
 		myPlayerState = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerState> ();
-
 		healthPoints = initialHealthPoints;
-
-		isAlive = true;
-		state = StateType.CAPTIVE;
 	}
 
 	public void ReceiveDamage(float damage) {
@@ -42,14 +37,13 @@ public class HostageState : MonoBehaviour {
 	public StateType GetState() {
 		return state;
 	}
-		
+
 	public void OnTriggerStay(Collider col) {
 		if (col.tag == "Player" && myPlayerState.isAlive) {
-			if (Input.GetAxis ("ActiveObject") != 0.0f) {
+			if (Input.GetAxis ("ActiveObject") != 0.0f && state == StateType.CAPTIVE) {
 				state = StateType.BEING_RESCUED_BY_PLAYER;
 				GameplayState.RecoveredHostages++;
 			}
 		}
 	}
-
 }
