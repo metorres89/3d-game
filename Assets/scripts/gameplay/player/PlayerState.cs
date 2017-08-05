@@ -5,26 +5,19 @@ using UnityEngine.SceneManagement;
 
 public class PlayerState : MonoBehaviour {
 
-	[SerializeField] private float currentHealthPoints = 100.0f;
+	private float currentHealthPoints = 100.0f;
+	private float currentStaminaPoints = 100.0f;
 
 	public float initialHealthPoints = 100.0f;
-
+	public float initialStaminaPoints = 100.0f;
 	public bool isAlive = true;
-
+	public bool isTired = false;
 	public float gameOverDelay = 3.0f;
 
-	public float GetHealthPoints(){
-		return currentHealthPoints;
-	}
-
-	public void RestoreHealthPoints(float amount) {
-		if( amount > 0.0f)
-			currentHealthPoints = Mathf.Clamp (currentHealthPoints + amount, 0, initialHealthPoints);
-	}
-		
 	public void Start() {
-		
+
 		currentHealthPoints = initialHealthPoints;
+		currentStaminaPoints = initialStaminaPoints;
 
 		GameplayState.CurrentState = GameplayState.StateType.PLAYING;
 		GameplayState.TotalEnemies = GameObject.FindGameObjectsWithTag ("Enemy").Length;
@@ -32,6 +25,19 @@ public class PlayerState : MonoBehaviour {
 
 		FXAudio.Init ();
 		ParticleSystemManager.Init ();
+	}
+
+	public float GetHealthPoints(){
+		return currentHealthPoints;
+	}
+
+	public float GetStaminaPoints(){
+		return currentStaminaPoints;
+	}
+
+	public void RestoreHealthPoints(float amount) {
+		if( amount > 0.0f)
+			currentHealthPoints = Mathf.Clamp (currentHealthPoints + amount, 0, initialHealthPoints);
 	}
 
 	public void ReceiveDamage(float damage) {
@@ -42,6 +48,20 @@ public class PlayerState : MonoBehaviour {
 		if (currentHealthPoints == 0.0f) {
 			isAlive = false;
 			StartCoroutine (GameOver ());
+		}
+	}
+
+	public void UpdateStaminaPoints(float staminaPoint) {
+		currentStaminaPoints += staminaPoint;
+
+		currentStaminaPoints = Mathf.Clamp (currentStaminaPoints, 0.0f, initialStaminaPoints);
+
+		if (currentStaminaPoints == 0.0f) {
+			isTired = true;
+		} 
+
+		if (currentStaminaPoints >= 25.0f) {
+			isTired = false;
 		}
 	}
 	

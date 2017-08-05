@@ -8,7 +8,9 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour {
 
 	[SerializeField] private float walkSpeed = 10.0f;
-	[SerializeField] private float runningSpeed = 20.0f; 
+	[SerializeField] private float runningSpeed = 20.0f;
+	[SerializeField] [Range(0.0f, 100.0f)] private float staminaReductionScaleWhileRunning = 1.0f;
+	[SerializeField] [Range(0.0f, 100.0f)]  private float staminaRecoveryScaleWhileWalking = 1.0f;
 	[SerializeField] private float jumpForce = 250.0f;
 	[SerializeField] private float rotationSpeed = 1.0f;
 	[SerializeField] private float verticalRotationMin = -90.0f;
@@ -21,6 +23,7 @@ public class PlayerMovement : MonoBehaviour {
 	private CapsuleCollider myCapsuleCollider;
 	private bool onStun;
 	private bool jumpAxisInUse;
+	private bool recoveryStaminaEnabled = false;
 
 	void Start () {
 		myPlayerState = gameObject.GetComponent<PlayerState> ();
@@ -39,9 +42,11 @@ public class PlayerMovement : MonoBehaviour {
 
 		CheckIfGrounded ();
 
-		if (myPlayerState.isAlive && onStun == false) {
-			ProcessWalkMovement ();
-			ProcessJump ();
+		if (myPlayerState.isAlive){
+			if (onStun == false) {
+				ProcessWalkMovement ();
+				ProcessJump ();
+			}
 		}
 
 		ProcessRotation ();
@@ -64,11 +69,37 @@ public class PlayerMovement : MonoBehaviour {
 		float verticalAxis = Input.GetAxis ("Vertical");
 		float fire3Axis = Input.GetAxis ("Fire3"); //running
 
+		if (horizontalAxis == 0.0f && verticalAxis == 0.0f) {
+			recoveryStaminaEnabled = true;
+		}
+
+		float movementSpeed = 0.0f;
+
+		if (fire3Axis > 0.0f && myPlayerState.isTired == false) {
+			movementSpeed = runningSpeed;
+
+			myPlayerState.UpdateStaminaPoints (staminaReductionScaleWhileRunning * Time.fixedDeltaTime * -1.0f);
+
+			recoveryStaminaEnabled = false;
+
+		}else{
+			
+			movementSpeed =  walkSpeed;
+
+			if (recoveryStaminaEnabled) {
+				myPlayerState.UpdateStaminaPoints (staminaRecoveryScaleWhileWalking * Time.fixedDeltaTime);
+			}
+		}
+
+		//velocity update
+
 		Vector3 gravityAcceleration = new Vector3 (0.0f, myRigidbody.velocity.y, 0.0f);
 
-		float finalSpeed = fire3Axis > 0.0f ? runningSpeed : walkSpeed;
+		Vector3 movementOnForward = transform.forward * verticalAxis * movementSpeed;
 
-		myRigidbody.velocity = (transform.forward * verticalAxis * finalSpeed) + (transform.right * horizontalAxis * finalSpeed) + gravityAcceleration;
+		Vector3 movementOnRight = transform.right * horizontalAxis * movementSpeed;
+
+		myRigidbody.velocity = movementOnForward + movementOnRight + gravityAcceleration;
 
 	}
 
