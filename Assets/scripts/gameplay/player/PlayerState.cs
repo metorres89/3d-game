@@ -31,6 +31,7 @@ public class PlayerState : MonoBehaviour {
 		GameplayState.TotalHostages = GameObject.FindGameObjectsWithTag ("Hostage").Length;
 
 		FXAudio.Init ();
+		ParticleSystemManager.Init ();
 	}
 
 	public void ReceiveDamage(float damage) {

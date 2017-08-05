@@ -11,11 +11,14 @@ public class PlayerShoot : MonoBehaviour {
 	[SerializeField] int totalAmmoPerPack = 100;
 	[SerializeField] int remainingAmmoPacks = 5;
 	[SerializeField] float reloadGunDelay = 3.0f;
+	/*[SerializeField] GameObject shootImpactPrototype;
+	[SerializeField] int shootImpactMaxPoolSize = 10;*/
 
 	private float myShootTimer;
 	private PlayerState myPlayerState;
 	private int currentAmmo;
 	private bool reloadingGun;
+	/*private ParticleSystem[] shootImpactPool;*/
 
 	public LineRenderer shootLineRenderer;
 
@@ -40,6 +43,14 @@ public class PlayerShoot : MonoBehaviour {
 		myShootTimer = shootRate;
 		currentAmmo = totalAmmoPerPack;
 		reloadingGun = false;
+
+		/*if(shootImpactPrototype != null) {
+			shootImpactPool = new ParticleSystem[shootImpactMaxPoolSize];
+
+			for (int index = 0; index < shootImpactMaxPoolSize; index++) {
+				shootImpactPool [index] = Instantiate (shootImpactPrototype, null).GetComponent<ParticleSystem>();
+			}	
+		}*/
 	}
 
 	public void FixedUpdate () {
@@ -67,6 +78,7 @@ public class PlayerShoot : MonoBehaviour {
 			Vector3 targetPosition;
 
 			if (hasHit) {
+				
 				targetPosition = hitInfo.point;
 				if (hitInfo.collider.gameObject.tag == "Enemy") {
 					
@@ -83,6 +95,19 @@ public class PlayerShoot : MonoBehaviour {
 						GameplayState.KilledEnemies++;
 					}
 				}
+
+				/*if (shootImpactPool.Length > 0) {
+					ParticleSystem currentPS = shootImpactPool [GameplayState.TotalShoots % 10];
+					currentPS.transform.position = hitInfo.point;
+					currentPS.Stop ();
+					currentPS.Play ();
+				}*/
+
+				ParticleSystem currentPS = ParticleSystemManager.GetParticleInstance ("PSShootImpact", GameplayState.TotalShoots);
+				currentPS.transform.position = hitInfo.point;
+				currentPS.Stop ();
+				currentPS.Play ();
+
 			} else {
 				targetPosition = Camera.main.transform.forward * shootMaxDistance;
 			}
