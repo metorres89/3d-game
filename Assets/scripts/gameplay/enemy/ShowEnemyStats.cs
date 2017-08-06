@@ -6,14 +6,14 @@ using UnityEngine.UI;
 public class ShowEnemyStats : MonoBehaviour {
 	private Canvas myCanvas;
 	private GameObject myPlayer;
-	private EnemyState myEnemyState;
+	private HealthState myHealthState;
 	public AmountBar healthBar;
 
 	public void Start () {
 		myCanvas = gameObject.transform.Find ("Canvas").GetComponent<Canvas>();	
 		myPlayer = GameObject.Find ("Player");
-		myEnemyState = gameObject.GetComponent<EnemyState> ();
-		healthBar.Init ("", myEnemyState.initialHealthPoints);
+		myHealthState = gameObject.GetComponent<HealthState> ();
+		healthBar.Init ("", myHealthState.initialHealthPoints);
 	}
 
 	public void Update () {
