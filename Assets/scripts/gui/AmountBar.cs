@@ -21,13 +21,15 @@ public class AmountBar : MonoBehaviour {
 
 	public void UpdateAmount(float newValue) {
 
-		string amountText = newValue.ToString ("F");
-		string labelText = string.Format ("{0}{1}", stringFormat, amountText);
-		amountLabel.text = labelText;
+		if (amountLabel != null) {
+			string amountText = newValue.ToString ("F");
+			string labelText = string.Format ("{0}{1}", stringFormat, amountText);
+			amountLabel.text = labelText;
+		}
 
 		float newWidth = newValue * originalBarSize.x / initialValue;
 		currentAmountImage.rectTransform.sizeDelta = new Vector2 (newWidth, originalBarSize.y);
-
+		
 	}
 
 }

@@ -68,17 +68,22 @@ public class PlayerShoot : MonoBehaviour {
 			if (hasHit) {
 				
 				targetPosition = hitInfo.point;
+
 				if (hitInfo.collider.gameObject.tag == "Enemy") {
 					
-					EnemyState enemyState = hitInfo.collider.gameObject.GetComponent<EnemyState> ();
-					EnemyMovement enemyMovement = hitInfo.collider.gameObject.GetComponent<EnemyMovement> ();
-
-					enemyState.ReceiveDamage (shootDamage);
-
 					GameplayState.SuccessShoots++;
 
-					if (enemyState.isAlive) {
-						enemyMovement.SetPlayerAsDestination ();
+					HealthState enemyHealthState = hitInfo.collider.gameObject.GetComponent<HealthState> ();
+
+					enemyHealthState.ReceiveDamage (shootDamage);
+
+					if (enemyHealthState.isAlive) {
+
+						EnemyMovement enemyMovement = hitInfo.collider.gameObject.GetComponent<EnemyMovement> ();
+
+						if(enemyMovement !=  null)
+							enemyMovement.SetPlayerAsDestination ();
+						
 					} else {
 						GameplayState.KilledEnemies++;
 					}

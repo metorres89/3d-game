@@ -17,7 +17,7 @@ public class HealthState : MonoBehaviour {
 		}
 	}
 
-	public void ReceiveDamage(float damage) {
+	public virtual void ReceiveDamage(float damage) {
 		float newHealthPoints = currentHealthPoints - damage;
 		currentHealthPoints = Mathf.Clamp (newHealthPoints, 0.0f, initialHealthPoints);
 

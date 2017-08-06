@@ -66,7 +66,7 @@ public class EnemyMovement : MonoBehaviour {
 
 		float animationSpeed = syncNavMeshSpeedAndAnimationSpeed ? myNavMeshAgent.speed : 1.0f;
 		string animationTrigger = myNavMeshAgent.speed == runSpeed ? "run" : "walk";
-		myEnemyState.TriggerAnimation (animationTrigger, animationSpeed);
+		myEnemyState.GetAnimatorState().TriggerAnimation (animationTrigger, animationSpeed);
 	}
 
 	public void SetPlayerAsDestination() {
