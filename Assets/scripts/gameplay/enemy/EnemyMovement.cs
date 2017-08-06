@@ -52,7 +52,7 @@ public class EnemyMovement : MonoBehaviour {
 
 		//Debug.LogFormat ("distanceFromPlayer: {0}", distanceFromPlayer);
 
-		if (distanceFromPlayer <= playerDistanceTrigger && myPlayerState.isAlive) {
+		if (distanceFromPlayer <= playerDistanceTrigger && myPlayerState.GetHealthState().isAlive) {
 			SetPlayerAsDestination ();
 		} else {
 			myEnemyState.SetEnemiesAlerted (false);
@@ -88,7 +88,7 @@ public class EnemyMovement : MonoBehaviour {
 	}
 
 	private void FollowPlayer(float deltaTime) {
-		if (myPlayerState.isAlive) {
+		if (myPlayerState.GetHealthState().isAlive) {
 			myNavMeshAgent.speed = runSpeed;
 			myNavMeshAgent.SetDestination (myPlayerState.gameObject.transform.position);
 			myFollowingPlayerTimer -= deltaTime;

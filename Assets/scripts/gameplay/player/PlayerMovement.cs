@@ -42,7 +42,7 @@ public class PlayerMovement : MonoBehaviour {
 
 		CheckIfGrounded ();
 
-		if (myPlayerState.isAlive){
+		if (myPlayerState.GetHealthState().isAlive){
 			if (onStun == false) {
 				ProcessWalkMovement ();
 				ProcessJump ();
@@ -75,10 +75,10 @@ public class PlayerMovement : MonoBehaviour {
 
 		float movementSpeed = 0.0f;
 
-		if (fire3Axis > 0.0f && myPlayerState.isTired == false) {
+		if (fire3Axis > 0.0f && myPlayerState.GetStaminaState().isTired == false) {
 			movementSpeed = runningSpeed;
 
-			myPlayerState.UpdateStaminaPoints (staminaReductionScaleWhileRunning * Time.fixedDeltaTime * -1.0f);
+			myPlayerState.GetStaminaState().UpdateStaminaPoints (staminaReductionScaleWhileRunning * Time.fixedDeltaTime * -1.0f);
 
 			recoveryStaminaEnabled = false;
 
@@ -87,7 +87,7 @@ public class PlayerMovement : MonoBehaviour {
 			movementSpeed =  walkSpeed;
 
 			if (recoveryStaminaEnabled) {
-				myPlayerState.UpdateStaminaPoints (staminaRecoveryScaleWhileWalking * Time.fixedDeltaTime);
+				myPlayerState.GetStaminaState().UpdateStaminaPoints (staminaRecoveryScaleWhileWalking * Time.fixedDeltaTime);
 			}
 		}
 

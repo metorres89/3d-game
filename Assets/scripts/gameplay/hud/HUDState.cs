@@ -20,14 +20,14 @@ public class HUDState : MonoBehaviour {
 		myPlayerState = goPlayer.GetComponent<PlayerState> ();
 		myPlayerShoot = goPlayer.GetComponent<PlayerShoot> ();
 
-		healthBar.Init ("Life: %", myPlayerState.initialHealthPoints);
-		staminaBar.Init ("Stamina: %", myPlayerState.initialStaminaPoints);
+		healthBar.Init ("Life: %", myPlayerState.GetHealthState().initialHealthPoints);
+		staminaBar.Init ("Stamina: %", myPlayerState.GetStaminaState().initialStaminaPoints);
 	}
 
 	void Update () {
 
-		healthBar.UpdateAmount (myPlayerState.GetHealthPoints ());
-		staminaBar.UpdateAmount (myPlayerState.GetStaminaPoints ());
+		healthBar.UpdateAmount (myPlayerState.GetHealthState().GetHealthPoints ());
+		staminaBar.UpdateAmount (myPlayerState.GetStaminaState().GetStaminaPoints ());
 
 		ammoLabel.text = string.Format("{0} / {1} - {2}", myPlayerShoot.GetCurrentAmmo(), myPlayerShoot.GetTotalAmmoPerPack(), myPlayerShoot.GetRemainingAmmoPacks());
 		enemiesKilledLabel.text = string.Format ("{0} / {1}", GameplayState.KilledEnemies , GameplayState.TotalEnemies );

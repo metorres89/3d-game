@@ -54,7 +54,7 @@ public class EnemyAttack : MonoBehaviour {
 
 			if (hitInfo.collider.gameObject.tag == "Player") {
 				float currentAttackDamage = Random.Range (minDamage, maxDamage);
-				PlayerState playerState = myPlayerRef.GetComponent<PlayerState> ();
+				HealthState playerState = myPlayerRef.GetComponent<HealthState> ();
 				playerState.ReceiveDamage (currentAttackDamage);
 
 				if (attackForce > 0.0f) {
