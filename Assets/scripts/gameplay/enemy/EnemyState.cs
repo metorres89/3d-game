@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof (Collider))]
 public class EnemyState : HealthState {
-	
+	private EnemyMovement myEnemyMovement;
 	private AnimatorState myAnimatorState;
 	private ShowEnemyStats myShowEnemyStats;
 	private Collider myCollider;
@@ -15,6 +15,7 @@ public class EnemyState : HealthState {
 	public bool isAttacking;
 
 	public void Start () {
+		myEnemyMovement = gameObject.GetComponent<EnemyMovement> ();
 		myAnimatorState = gameObject.GetComponent<AnimatorState> ();
 		myShowEnemyStats = gameObject.GetComponent<ShowEnemyStats> ();
 		myCollider = gameObject.GetComponent<Collider> ();
@@ -29,7 +30,9 @@ public class EnemyState : HealthState {
 
 		myShowEnemyStats.healthBar.UpdateAmount (base.GetHealthPoints ());
 
-		if (!base.isAlive) {
+		if (isAlive) {
+			myEnemyMovement.SetPlayerAsDestination ();
+		}else{
 			Debug.Log ("Enemy is Dead!");
 			myAnimatorState.TriggerAnimation ("dead", 1.0f);
 			myCollider.enabled = false;

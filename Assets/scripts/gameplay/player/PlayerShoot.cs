@@ -77,14 +77,7 @@ public class PlayerShoot : MonoBehaviour {
 
 					enemyHealthState.ReceiveDamage (shootDamage);
 
-					if (enemyHealthState.isAlive) {
-
-						EnemyMovement enemyMovement = hitInfo.collider.gameObject.GetComponent<EnemyMovement> ();
-
-						if(enemyMovement !=  null)
-							enemyMovement.SetPlayerAsDestination ();
-						
-					} else {
+					if (!enemyHealthState.isAlive) {
 						GameplayState.KilledEnemies++;
 					}
 				}
