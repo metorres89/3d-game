@@ -9,10 +9,9 @@ public class EnemyItemDrop : MonoBehaviour {
 	public DroppableItem[] droppableItems;
 
 	private float totalChance;
-	private bool alreadyDropped;
 	private EnemyState myEnemyState;
 
-	private void DropRandomItem() {
+	public void DropRandomItem() {
 		float dropChance = Random.Range (0.0f, 1.0f);
 
 		if (dropChance <= chanceToDropItem) {
@@ -45,13 +44,5 @@ public class EnemyItemDrop : MonoBehaviour {
 	public void Start(){
 		myEnemyState = gameObject.GetComponent<EnemyState> ();
 		totalChance = GetTotalChances ();
-		alreadyDropped = false;
-	}
-
-	public void Update() {
-		if (myEnemyState.isAlive == false && alreadyDropped == false && chanceToDropItem > 0.0f && droppableItems.Length > 0) {
-			DropRandomItem ();
-			alreadyDropped = true;
-		}
 	}
 }

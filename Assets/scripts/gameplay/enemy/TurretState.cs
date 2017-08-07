@@ -13,12 +13,16 @@ public class TurretState : HealthState {
 	}
 
 	public override void ReceiveDamage(float damage) {
-		base.ReceiveDamage (damage);
-		myShowEnemyStats.healthBar.UpdateAmount (base.GetHealthPoints ());
+		if (isAlive) {
+			
+			base.ReceiveDamage (damage);
+			myShowEnemyStats.healthBar.UpdateAmount (base.GetHealthPoints ());
 
-		if (!isAlive) {
-			myShowEnemyStats.enabled = false;
-			myTurretShoot.enabled = false;
+			if (!isAlive) {
+				GameplayState.KilledEnemies++;
+				myShowEnemyStats.enabled = false;
+				myTurretShoot.enabled = false;
+			}
 		}
 	}
 }

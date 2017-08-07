@@ -82,10 +82,6 @@ public class PlayerShoot : MonoBehaviour {
 					HealthState enemyHealthState = hitInfo.collider.gameObject.GetComponent<HealthState> ();
 
 					enemyHealthState.ReceiveDamage (shootDamage);
-
-					if (!enemyHealthState.isAlive) {
-						GameplayState.KilledEnemies++;
-					}
 				}
 
 				ParticleSystem currentPS = ParticleSystemManager.GetParticleInstance ("PSShootImpact", GameplayState.TotalShoots);

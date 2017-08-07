@@ -7,6 +7,7 @@ public class EnemyState : HealthState {
 	private EnemyMovement myEnemyMovement;
 	private AnimatorState myAnimatorState;
 	private ShowEnemyStats myShowEnemyStats;
+	private EnemyItemDrop myEnemyItemDrop;
 	private Collider myCollider;
 	private bool enemiesAlerted;
 
@@ -20,6 +21,7 @@ public class EnemyState : HealthState {
 		myEnemyMovement = gameObject.GetComponent<EnemyMovement> ();
 		myAnimatorState = gameObject.GetComponent<AnimatorState> ();
 		myShowEnemyStats = gameObject.GetComponent<ShowEnemyStats> ();
+		myEnemyItemDrop = gameObject.GetComponent<EnemyItemDrop> ();
 		myCollider = gameObject.GetComponent<Collider> ();
 
 		isAttacking = false;
@@ -30,20 +32,24 @@ public class EnemyState : HealthState {
 	}
 
 	public override void ReceiveDamage(float damage) {
-		base.ReceiveDamage (damage);
-
-		myShowEnemyStats.healthBar.UpdateAmount (base.GetHealthPoints ());
-
 		if (isAlive) {
-			myEnemyMovement.SetPlayerAsDestination ();
-		}else{
 
-			myAnimatorState.TriggerAnimation ("dead", 1.0f);
-			myCollider.enabled = false;
-			myShowEnemyStats.enabled = false;
+			base.ReceiveDamage (damage);
+
+			myShowEnemyStats.healthBar.UpdateAmount (base.GetHealthPoints ());
+
+			if (isAlive) {
+				myEnemyMovement.SetPlayerAsDestination ();
+			} else {
+				GameplayState.KilledEnemies++;
+				myAnimatorState.TriggerAnimation ("dead", 1.0f);
+				myEnemyItemDrop.DropRandomItem ();
+				myCollider.enabled = false;
+				myShowEnemyStats.enabled = false;
+			}
+
+			AlertNearEnemies ();
 		}
-
-		AlertNearEnemies ();
 	}
 
 	private void AlertNearEnemies() {
