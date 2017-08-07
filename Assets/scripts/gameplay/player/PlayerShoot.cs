@@ -17,6 +17,8 @@ public class PlayerShoot : MonoBehaviour {
 	private int currentAmmo;
 	private bool reloadingGun;
 
+	private int shootBitMask;
+
 	public LineRenderer shootLineRenderer;
 
 	public int GetCurrentAmmo(){
@@ -40,6 +42,10 @@ public class PlayerShoot : MonoBehaviour {
 		myShootTimer = shootRate;
 		currentAmmo = totalAmmoPerPack;
 		reloadingGun = false;
+
+		int bmEnemy = 1 << LayerMask.NameToLayer ("Enemy");
+		int bmDefault = 1 << LayerMask.NameToLayer ("Default");
+		shootBitMask = bmEnemy | bmDefault;
 	}
 
 	public void FixedUpdate () {
@@ -61,7 +67,7 @@ public class PlayerShoot : MonoBehaviour {
 			GameplayState.TotalShoots++;
 
 			RaycastHit hitInfo;
-			bool hasHit = Physics.Raycast (Camera.main.transform.position, Camera.main.transform.forward, out hitInfo, shootMaxDistance);
+			bool hasHit = Physics.Raycast (Camera.main.transform.position, Camera.main.transform.forward, out hitInfo, shootMaxDistance, shootBitMask);
 
 			Vector3 targetPosition;
 

@@ -10,6 +10,8 @@ public class EnemyState : HealthState {
 	private Collider myCollider;
 	private bool enemiesAlerted;
 
+	private int alertBitMask;
+
 	[SerializeField] private float alertOtherEnemiesRadius = 10.0f;
 
 	public bool isAttacking;
@@ -23,6 +25,8 @@ public class EnemyState : HealthState {
 		isAttacking = false;
 
 		enemiesAlerted = false;
+
+		alertBitMask = 1 << LayerMask.NameToLayer ("Enemy");
 	}
 
 	public override void ReceiveDamage(float damage) {
@@ -47,8 +51,7 @@ public class EnemyState : HealthState {
 
 			enemiesAlerted = true;
 
-			int bitMask = 1 << LayerMask.NameToLayer ("Enemy");
-			Collider[] enemiesToAlert = Physics.OverlapSphere (gameObject.transform.position, alertOtherEnemiesRadius, bitMask);
+			Collider[] enemiesToAlert = Physics.OverlapSphere (gameObject.transform.position, alertOtherEnemiesRadius, alertBitMask);
 
 			foreach (Collider enemy in enemiesToAlert) {
 				enemy.gameObject.GetComponent<EnemyMovement> ().SetPlayerAsDestination ();
