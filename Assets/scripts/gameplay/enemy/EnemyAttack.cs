@@ -49,9 +49,6 @@ public class EnemyAttack : MonoBehaviour {
 		bool hasHit = Physics.Raycast (gameObject.transform.position, gameObject.transform.forward, out hitInfo, playerDistanceAttackTrigger);
 
 		if (hasHit) {
-
-			Debug.LogFormat ("El enemigo goleó a algo!: {0}", hitInfo.collider.gameObject.tag);
-
 			if (hitInfo.collider.gameObject.tag == "Player") {
 				float currentAttackDamage = Random.Range (minDamage, maxDamage);
 				HealthState playerState = myPlayerRef.GetComponent<HealthState> ();

@@ -4,15 +4,15 @@ using UnityEngine;
 
 public static class FXAudio
 {
-	private static AudioSource FxAudioSource;
+	private static AudioSource MainAudioSource;
 	private static Dictionary<string, AudioClip> AudioClipDictionary;
 	private static float FxVolume;
 
 	public static void Init() {
-		if (FxAudioSource == null) {
+		if (MainAudioSource == null) {
 			GameObject go = GameObject.Find("FXAudioSource");
 			if (go != null)
-				FxAudioSource = go.GetComponent<AudioSource> ();
+				MainAudioSource = go.GetComponent<AudioSource> ();
 			else
 				Debug.LogWarningFormat ("FXAudio - Init - There is no FXAudioSource GameObject with AudioSource component attached.");
 		}
@@ -39,14 +39,26 @@ public static class FXAudio
 	}
 
 	public static void PlayClip(string clipName) {
-		if (FxAudioSource != null) {
+		if (MainAudioSource != null) {
 			if (AudioClipDictionary.ContainsKey (clipName)) {
-				FxAudioSource.PlayOneShot (AudioClipDictionary [clipName], FxVolume);
+				MainAudioSource.PlayOneShot (AudioClipDictionary [clipName], FxVolume);
 			} else {
 				Debug.LogWarning ("FXAudio - clipName doesn't exists in audioClipDictionay");
 			}
 		} else {
-			Debug.LogWarning ("FXAudio - playClip - fxAudioSource is null");
+			Debug.LogWarning ("FXAudio - playClip - MainAudioSource is null");
+		}
+	}
+
+	public static void PlayClip(string clipName, AudioSource targetSource) {
+		if (targetSource != null) {
+			if (AudioClipDictionary.ContainsKey (clipName)) {
+				targetSource.PlayOneShot (AudioClipDictionary [clipName], FxVolume);
+			} else {
+				Debug.LogWarning ("FXAudio - clipName doesn't exists in audioClipDictionay");
+			}
+		} else {
+			Debug.LogWarning ("FXAudio - playClip - targetSource is null");
 		}
 	}
 
@@ -60,5 +72,12 @@ public static class FXAudio
 
 	public static void SetVolume(float volume) {
 		FxVolume = Mathf.Clamp(volume, 0.0f, 1.0f);
+	}
+
+	public static AudioClip GetClip(string clipName) {
+		if (AudioClipDictionary.ContainsKey (clipName)) {
+			return AudioClipDictionary [clipName];
+		}
+		return null;
 	}
 }

@@ -49,9 +49,6 @@ public class EnemyMovement : MonoBehaviour {
 
 	private void ProcessMovement( float deltaTime ) {
 		float distanceFromPlayer = Vector3.Distance (gameObject.transform.position, myPlayerState.gameObject.transform.position);
-
-		//Debug.LogFormat ("distanceFromPlayer: {0}", distanceFromPlayer);
-
 		if (distanceFromPlayer <= playerDistanceTrigger && myPlayerState.GetHealthState().isAlive) {
 			SetPlayerAsDestination ();
 		} else {

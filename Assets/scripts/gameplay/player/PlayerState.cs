@@ -12,6 +12,11 @@ public class PlayerState : MonoBehaviour {
 	private StaminaState myStaminaState;
 	public float gameOverDelay = 3.0f;
 
+	public void Awake() {
+		FXAudio.Init ();
+		ParticleSystemManager.Init ();
+	}
+
 	public void Start() {
 
 		myHealthState = gameObject.GetComponent<HealthState> ();
@@ -20,9 +25,6 @@ public class PlayerState : MonoBehaviour {
 		GameplayState.CurrentState = GameplayState.StateType.PLAYING;
 		GameplayState.TotalEnemies = GameObject.FindGameObjectsWithTag ("Enemy").Length;
 		GameplayState.TotalHostages = GameObject.FindGameObjectsWithTag ("Hostage").Length;
-
-		FXAudio.Init ();
-		ParticleSystemManager.Init ();
 	}
 
 	public void Update() {

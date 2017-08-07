@@ -24,11 +24,7 @@ public class AnimatorState : MonoBehaviour {
 
 		string stateInfoName = string.Format ("{0}.{1}", animatorLayerName, triggerName);
 
-		//Debug.Log (stateInfoName);
-
 		if (!stateInfo.IsName (stateInfoName)) {
-			//Debug.LogFormat ("myAnimator.SetTrigger:{0} myAnimator.speed:{1}", triggerName, animationSpeed);
-
 			myAnimator.speed = animationSpeed;
 			myAnimator.SetTrigger (triggerName);
 		}

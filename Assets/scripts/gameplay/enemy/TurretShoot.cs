@@ -17,11 +17,14 @@ public class TurretShoot : MonoBehaviour {
 	private GameObject shootOrigin;
 	private LineRenderer shootLineRenderer;
 	private float shootTimer;
+	private AudioSource myAudioSource;
 
 	void Start () {
 		myPlayerState = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerState> ();
 		shootOrigin = gameObject.transform.Find ("ShootOrigin").gameObject;
 		shootLineRenderer = shootOrigin.GetComponent<LineRenderer> ();
+		myAudioSource = gameObject.GetComponent<AudioSource> ();
+		myAudioSource.clip = FXAudio.GetClip ("fire");
 		shootTimer = shootSpeed;
 	}
 	
@@ -55,11 +58,7 @@ public class TurretShoot : MonoBehaviour {
 
 		bool hasHit = Physics.Raycast (shootOrigin.transform.position, shootOrigin.transform.forward, out hitInfo, targetDistance);
 
-		//Debug.LogFormat ("ShootRayCast - hasHit:{0} - targetDistance:{1}", hasHit, targetDistance);
-
 		if (hasHit) {
-
-			Debug.LogFormat ("ShootRayCast - el disparo alcanzó el objeto con tag: {0}", hitInfo.collider.gameObject.tag);
 
 			if (hitInfo.collider.gameObject.tag == "Player") {
 
@@ -70,13 +69,13 @@ public class TurretShoot : MonoBehaviour {
 				else
 					currentDamage = Random.Range (minDamage, maxDamage);
 
-				Debug.LogFormat ("ShootRayCast - el player recibirá damage: {0}", currentDamage);
-
 				myPlayerState.GetHealthState().ReceiveDamage (currentDamage);
 			}
 		}
 
-		FXAudio.PlayClip ("fire");
+		//FXAudio.PlayClip ("fire", myAudioSource);
+		myAudioSource.Stop();
+		myAudioSource.Play();
 
 		StartCoroutine(DrawShootLine (targetPosition, shootSpeed * 0.5f));
 	}

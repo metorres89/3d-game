@@ -33,7 +33,7 @@ public class EnemyState : HealthState {
 		if (isAlive) {
 			myEnemyMovement.SetPlayerAsDestination ();
 		}else{
-			Debug.Log ("Enemy is Dead!");
+
 			myAnimatorState.TriggerAnimation ("dead", 1.0f);
 			myCollider.enabled = false;
 			myShowEnemyStats.enabled = false;
