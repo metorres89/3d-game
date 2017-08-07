@@ -14,13 +14,21 @@ public class ResultPanel : MonoBehaviour {
 	public Button mainMenuButton;
 	public Button replayButton;
 
+	public AudioClip victoryMusic;
+	public AudioClip gameOverMusic;
+	public AudioSource musicAudioSource;
+
 	public void Start () {
 
 		if (GameplayState.CurrentState == GameplayState.StateType.GAME_OVER) {
 			titleLabel.text = "GAME OVER";
+			musicAudioSource.clip = gameOverMusic;
 		} else {
 			titleLabel.text = "VICTORY";
+			musicAudioSource.clip = victoryMusic;
 		}
+
+		musicAudioSource.Play ();
 
 		rescuedHostagesLabel.text = GameplayState.RescuedHostages.ToString();
 		killedEnemiesLabel.text = GameplayState.KilledEnemies.ToString();
