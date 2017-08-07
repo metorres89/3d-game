@@ -54,7 +54,11 @@ public class EnemyState : HealthState {
 			Collider[] enemiesToAlert = Physics.OverlapSphere (gameObject.transform.position, alertOtherEnemiesRadius, alertBitMask);
 
 			foreach (Collider enemy in enemiesToAlert) {
-				enemy.gameObject.GetComponent<EnemyMovement> ().SetPlayerAsDestination ();
+				EnemyMovement em = enemy.gameObject.GetComponent<EnemyMovement> ();
+
+				if (em != null) {
+					em.SetPlayerAsDestination ();
+				}
 			}
 		}
 	}

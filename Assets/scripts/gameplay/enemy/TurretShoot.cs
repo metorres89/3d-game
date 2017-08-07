@@ -18,6 +18,7 @@ public class TurretShoot : MonoBehaviour {
 	private LineRenderer shootLineRenderer;
 	private float shootTimer;
 	private AudioSource myAudioSource;
+	private int shootBitMask;
 
 	void Start () {
 		myPlayerState = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerState> ();
@@ -26,6 +27,10 @@ public class TurretShoot : MonoBehaviour {
 		myAudioSource = gameObject.GetComponent<AudioSource> ();
 		myAudioSource.clip = FXAudio.GetClip ("fire");
 		shootTimer = shootSpeed;
+
+		int playerBitMask = 1 << LayerMask.NameToLayer ("Player");
+		int defaultBitMask = 1 << LayerMask.NameToLayer ("Default");
+		shootBitMask = playerBitMask | defaultBitMask;
 	}
 	
 	void FixedUpdate () {
@@ -56,12 +61,11 @@ public class TurretShoot : MonoBehaviour {
 
 		RaycastHit hitInfo;
 
-		bool hasHit = Physics.Raycast (shootOrigin.transform.position, shootOrigin.transform.forward, out hitInfo, targetDistance);
+		bool hasHit = Physics.Raycast (shootOrigin.transform.position, shootOrigin.transform.forward, out hitInfo, targetDistance, shootBitMask);
 
 		if (hasHit) {
 
-			if (hitInfo.collider.gameObject.tag == "Player") {
-
+			if (hitInfo.collider.tag == "Player") {
 				float currentDamage = 0.0f;
 
 				if (fixedDamage)
@@ -69,15 +73,15 @@ public class TurretShoot : MonoBehaviour {
 				else
 					currentDamage = Random.Range (minDamage, maxDamage);
 
-				myPlayerState.GetHealthState().ReceiveDamage (currentDamage);
+				myPlayerState.GetHealthState ().ReceiveDamage (currentDamage);
+
+				myAudioSource.Stop();
+				myAudioSource.Play();
+
+				StartCoroutine(DrawShootLine (targetPosition, shootSpeed * 0.5f));
 			}
+		
 		}
-
-		//FXAudio.PlayClip ("fire", myAudioSource);
-		myAudioSource.Stop();
-		myAudioSource.Play();
-
-		StartCoroutine(DrawShootLine (targetPosition, shootSpeed * 0.5f));
 	}
 
 	public IEnumerator DrawShootLine(Vector3 target, float delay){

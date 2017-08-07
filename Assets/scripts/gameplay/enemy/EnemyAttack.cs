@@ -13,11 +13,13 @@ public class EnemyAttack : MonoBehaviour {
 	private GameObject myPlayerRef;
 	private EnemyState myEnemyState;
 	private float attackTimer = 1.0f;
+	private int attackBitMask;
 
 	void Start () {
 		myPlayerRef = GameObject.FindGameObjectWithTag ("Player");
 		myEnemyState = gameObject.GetComponent<EnemyState> ();
 		attackTimer = attackSpeed;
+		attackBitMask = 1 << LayerMask.NameToLayer ("Player");
 	}
 	
 	public void FixedUpdate () {
@@ -46,21 +48,19 @@ public class EnemyAttack : MonoBehaviour {
 
 	private void Attack() {
 		RaycastHit hitInfo;
-		bool hasHit = Physics.Raycast (gameObject.transform.position, gameObject.transform.forward, out hitInfo, playerDistanceAttackTrigger);
+		bool hasHit = Physics.Raycast (gameObject.transform.position, gameObject.transform.forward, out hitInfo, playerDistanceAttackTrigger, attackBitMask);
 
 		if (hasHit) {
-			if (hitInfo.collider.gameObject.tag == "Player") {
-				float currentAttackDamage = Random.Range (minDamage, maxDamage);
-				HealthState playerState = myPlayerRef.GetComponent<HealthState> ();
-				playerState.ReceiveDamage (currentAttackDamage);
+			float currentAttackDamage = Random.Range (minDamage, maxDamage);
+			HealthState playerState = myPlayerRef.GetComponent<HealthState> ();
+			playerState.ReceiveDamage (currentAttackDamage);
 
-				if (attackForce > 0.0f) {
-					Vector3 impact = gameObject.transform.forward * attackForce;
-					impact.y = 100;
+			if (attackForce > 0.0f) {
+				Vector3 impact = gameObject.transform.forward * attackForce;
+				impact.y = 100;
 
-					PlayerMovement playerMovement = myPlayerRef.GetComponent<PlayerMovement> ();
-					playerMovement.ReceiveForce (impact);
-				}
+				PlayerMovement playerMovement = myPlayerRef.GetComponent<PlayerMovement> ();
+				playerMovement.ReceiveForce (impact);
 			}
 		}
 	}
