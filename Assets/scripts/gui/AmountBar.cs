@@ -7,7 +7,6 @@ public class AmountBar : MonoBehaviour {
 
 	public Text amountLabel;
 	public Image currentAmountImage;
-
 	private float initialValue;
 	private string stringFormat;
 
@@ -16,7 +15,6 @@ public class AmountBar : MonoBehaviour {
 	public void Init(string format, float initial) {
 		initialValue = initial;
 		stringFormat = format;
-		originalBarSize = currentAmountImage.rectTransform.sizeDelta;
 	}
 
 	public void UpdateAmount(float newValue) {
@@ -27,9 +25,8 @@ public class AmountBar : MonoBehaviour {
 			amountLabel.text = labelText;
 		}
 
-		float newWidth = newValue * originalBarSize.x / initialValue;
-		currentAmountImage.rectTransform.sizeDelta = new Vector2 (newWidth, originalBarSize.y);
-		
+		float newFill = newValue / initialValue;
+		currentAmountImage.fillAmount = newFill;
 	}
 
 }
