@@ -9,7 +9,7 @@ public class HealthState : MonoBehaviour {
 
 	private float currentHealthPoints;
 
-	void Awake () {
+	public virtual void Awake () {
 		currentHealthPoints = initialHealthPoints;
 
 		if (currentHealthPoints > 0.0f) {

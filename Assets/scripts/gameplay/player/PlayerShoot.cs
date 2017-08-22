@@ -49,7 +49,7 @@ public class PlayerShoot : MonoBehaviour {
 	}
 
 	public void FixedUpdate () {
-		if (myPlayerState.GetHealthState().isAlive) {
+		if (myPlayerState.isAlive) {
 			
 			if (Input.GetAxis ("Fire1") != 0.0f && currentAmmo > 0 && reloadingGun == false) {
 				Shoot (Time.fixedDeltaTime);

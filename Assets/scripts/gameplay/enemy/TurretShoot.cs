@@ -73,7 +73,7 @@ public class TurretShoot : MonoBehaviour {
 				else
 					currentDamage = Random.Range (minDamage, maxDamage);
 
-				myPlayerState.GetHealthState ().ReceiveDamage (currentDamage);
+				myPlayerState.ReceiveDamage (currentDamage);
 
 				myAudioSource.Stop();
 				myAudioSource.Play();

@@ -42,7 +42,7 @@ public class PlayerMovement : MonoBehaviour {
 
 		CheckIfGrounded ();
 
-		if (myPlayerState.GetHealthState().isAlive){
+		if (myPlayerState.isAlive){
 			if (onStun == false) {
 				ProcessWalkMovement ();
 				ProcessJump ();

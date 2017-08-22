@@ -39,7 +39,7 @@ public class HostageState : MonoBehaviour {
 	}
 
 	public void OnTriggerStay(Collider col) {
-		if (col.tag == "Player" && myPlayerState.GetHealthState().isAlive) {
+		if (col.tag == "Player" && myPlayerState.isAlive) {
 			if (Input.GetAxis ("ActiveObject") != 0.0f && state == StateType.CAPTIVE) {
 				state = StateType.BEING_RESCUED_BY_PLAYER;
 				GameplayState.RecoveredHostages++;

@@ -20,13 +20,13 @@ public class HUDState : MonoBehaviour {
 		myPlayerState = goPlayer.GetComponent<PlayerState> ();
 		myPlayerShoot = goPlayer.GetComponent<PlayerShoot> ();
 
-		healthBar.Init ("Life: %", myPlayerState.GetHealthState().initialHealthPoints);
+		healthBar.Init ("Life: %", myPlayerState.initialHealthPoints);
 		staminaBar.Init ("Stamina: %", myPlayerState.GetStaminaState().initialStaminaPoints);
 	}
 
 	void Update () {
 
-		healthBar.UpdateAmount (myPlayerState.GetHealthState().GetHealthPoints ());
+		healthBar.UpdateAmount (myPlayerState.GetHealthPoints ());
 		staminaBar.UpdateAmount (myPlayerState.GetStaminaState().GetStaminaPoints ());
 
 		ammoLabel.text = string.Format("{0} / {1} - {2}", myPlayerShoot.GetCurrentAmmo(), myPlayerShoot.GetTotalAmmoPerPack(), myPlayerShoot.GetRemainingAmmoPacks());

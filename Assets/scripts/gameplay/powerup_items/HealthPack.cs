@@ -16,7 +16,7 @@ public class HealthPack : MonoBehaviour {
 
 	public void OnTriggerEnter(Collider col) {
 		if (col.tag == "Player") {
-			myPlayerState.GetHealthState().RestoreHealthPoints (restoringHealthPoints);
+			myPlayerState.RestoreHealthPoints (restoringHealthPoints);
 			Destroy (gameObject);
 		}
 	}

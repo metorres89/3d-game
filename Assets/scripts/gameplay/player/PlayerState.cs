@@ -3,23 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
-[RequireComponent(typeof (HealthState))]
 [RequireComponent(typeof (StaminaState))]
-public class PlayerState : MonoBehaviour {
+public class PlayerState : HealthState {
 
-	private HealthState myHealthState;
 	private StaminaState myStaminaState;
+	public FadeImage bloodFadingImage;
 	public float gameOverDelay = 3.0f;
 
-	public void Awake() {
+	public override void Awake() {
+		base.Awake ();
 		FXAudio.Init ();
 		ParticleSystemManager.Init ();
 	}
 
 	public void Start() {
-
-		myHealthState = gameObject.GetComponent<HealthState> ();
 		myStaminaState = gameObject.GetComponent<StaminaState> ();
 
 		GameplayState.CurrentState = GameplayState.StateType.PLAYING;
@@ -28,7 +25,7 @@ public class PlayerState : MonoBehaviour {
 	}
 
 	public void Update() {
-		if (!myHealthState.isAlive) {
+		if(!isAlive){
 			StartCoroutine (GameOver ());
 		}
 	}
@@ -39,11 +36,18 @@ public class PlayerState : MonoBehaviour {
 		SceneManager.LoadScene("game_result", LoadSceneMode.Single);
 	}
 
-	public HealthState GetHealthState(){
-		return myHealthState;
-	}
-
 	public StaminaState GetStaminaState(){
 		return myStaminaState;
+	}
+
+	public override void ReceiveDamage(float damage) {
+		if (isAlive) {
+
+			base.ReceiveDamage (damage);
+
+			Debug.Log("we have to display damage effect on screen!");
+
+			bloodFadingImage.FadeInThenFadeOut (0.5f);
+		}
 	}
 }

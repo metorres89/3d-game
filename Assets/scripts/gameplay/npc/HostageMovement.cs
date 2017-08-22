@@ -46,7 +46,7 @@ public class HostageMovement : MonoBehaviour {
 			
 			myNavMeshAgent.SetDestination (rescueArea.transform.position);
 		} else {
-			if (myPlayerState.GetHealthState().isAlive) {
+			if (myPlayerState.isAlive) {
 
 				if (myNavMeshAgent.speed != walkSpeed)
 					myNavMeshAgent.speed = walkSpeed;
