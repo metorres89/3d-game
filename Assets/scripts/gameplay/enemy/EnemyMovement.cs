@@ -73,27 +73,40 @@ public class EnemyMovement : MonoBehaviour {
 
 	private void FollowPatrolPoints() {
 		myNavMeshAgent.speed = walkSpeed;
-		myNavMeshAgent.SetDestination (patrolPoints [patrolPointIndex].transform.position);
 
-		if (myNavMeshAgent.remainingDistance < myNavMeshAgent.stoppingDistance) {
+		TryToSetNewDestination (patrolPoints [patrolPointIndex].transform.position);
 
-			patrolPointIndex++;
-
-			if (patrolPointIndex >= patrolPoints.Length)
-				patrolPointIndex = 0;
+		if (!myNavMeshAgent.pathPending) {
+			if (myNavMeshAgent.remainingDistance < myNavMeshAgent.stoppingDistance) {
+				patrolPointIndex++;
+				if (patrolPointIndex >= patrolPoints.Length) {
+					patrolPointIndex = 0;
+				}
+			}
 		}
 	}
 
 	private void FollowPlayer(float deltaTime) {
 		if (myPlayerState.isAlive) {
 			myNavMeshAgent.speed = runSpeed;
-			myNavMeshAgent.SetDestination (myPlayerState.gameObject.transform.position);
+
+			TryToSetNewDestination (myPlayerState.gameObject.transform.position);
+
 			myFollowingPlayerTimer -= deltaTime;
 			if (myFollowingPlayerTimer <= 0.0f)
 				isFollowingPlayer = false;
 
 		} else {
 			isFollowingPlayer = false;
+		}
+	}
+
+	private void TryToSetNewDestination(Vector3 newDestination){
+
+		float distanceDestinationPoint = Vector3.Distance (myNavMeshAgent.destination, newDestination);
+
+		if ( (myNavMeshAgent.pathPending == false && distanceDestinationPoint > 1.0f ) || (myNavMeshAgent.hasPath == false && myNavMeshAgent.pathPending == false)) {
+			myNavMeshAgent.SetDestination (newDestination);
 		}
 	}
 }

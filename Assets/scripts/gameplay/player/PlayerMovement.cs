@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour {
 	[SerializeField] private float verticalRotationMax = 90.0f;
 	[SerializeField] private bool isOnGround = false;
 	[SerializeField] private float stunRecoveryTime = 1.0f;
+	[SerializeField] private bool lockCursorAtStart = true;
 
 	private PlayerState myPlayerState;
 	private Rigidbody myRigidbody;
@@ -30,8 +31,10 @@ public class PlayerMovement : MonoBehaviour {
 		myRigidbody = gameObject.GetComponent<Rigidbody> ();
 		myCapsuleCollider = gameObject.GetComponent<CapsuleCollider> ();
 
-		Cursor.visible = false;
-		Cursor.lockState = CursorLockMode.Locked;
+		if (lockCursorAtStart) {
+			Cursor.visible = false;
+			Cursor.lockState = CursorLockMode.Locked;
+		}
 
 		onStun = false;
 
