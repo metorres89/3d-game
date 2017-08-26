@@ -39,7 +39,7 @@ public class EnemyState : HealthState {
 			myShowEnemyStats.healthBar.UpdateAmount (base.GetHealthPoints ());
 
 			if (isAlive) {
-				myEnemyMovement.SetPlayerAsDestination ();
+				myEnemyMovement.StartFollowingPlayer ();
 			} else {
 				GameplayState.KilledEnemies++;
 				myAnimatorState.TriggerAnimation ("dead", 1.0f);
@@ -63,7 +63,7 @@ public class EnemyState : HealthState {
 				EnemyMovement em = enemy.gameObject.GetComponent<EnemyMovement> ();
 
 				if (em != null) {
-					em.SetPlayerAsDestination ();
+					em.StartFollowingPlayer ();
 				}
 			}
 		}

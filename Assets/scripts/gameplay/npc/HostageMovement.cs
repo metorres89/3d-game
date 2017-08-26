@@ -38,20 +38,20 @@ public class HostageMovement : MonoBehaviour {
 	}
 
 	private void ProcessMovement( float deltaTime ) {
+
 		float distanceFromRescueArea = Vector3.Distance (gameObject.transform.position, rescueArea.transform.position);
 
 		if (distanceFromRescueArea <= triggeringDistanceFromRescueArea) {
-			if (myNavMeshAgent.speed != runSpeed)
-				myNavMeshAgent.speed = runSpeed;
 			
-			myNavMeshAgent.SetDestination (rescueArea.transform.position);
+			myNavMeshAgent.speed = runSpeed;
+			myNavMeshAgent.TryToSetNewDestination (rescueArea.transform.position);
+
 		} else {
+
 			if (myPlayerState.isAlive) {
-
-				if (myNavMeshAgent.speed != walkSpeed)
-					myNavMeshAgent.speed = walkSpeed;
-
-				myNavMeshAgent.SetDestination (myPlayerState.gameObject.transform.position);
+				
+				myNavMeshAgent.speed = walkSpeed;
+				myNavMeshAgent.TryToSetNewDestination (myPlayerState.gameObject.transform.position);
 			}
 		}
 	}

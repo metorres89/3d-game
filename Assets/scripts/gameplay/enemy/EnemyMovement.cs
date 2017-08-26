@@ -49,8 +49,9 @@ public class EnemyMovement : MonoBehaviour {
 
 	private void ProcessMovement( float deltaTime ) {
 		float distanceFromPlayer = Vector3.Distance (gameObject.transform.position, myPlayerState.gameObject.transform.position);
+
 		if (distanceFromPlayer <= playerDistanceTrigger && myPlayerState.isAlive) {
-			SetPlayerAsDestination ();
+			StartFollowingPlayer ();
 		} else {
 			myEnemyState.SetEnemiesAlerted (false);
 		}
@@ -66,7 +67,7 @@ public class EnemyMovement : MonoBehaviour {
 		myEnemyState.GetAnimatorState().TriggerAnimation (animationTrigger, animationSpeed);
 	}
 
-	public void SetPlayerAsDestination() {
+	public void StartFollowingPlayer() {
 		isFollowingPlayer = true;
 		myFollowingPlayerTimer = followingPlayerTimeLength;
 	}
@@ -74,7 +75,7 @@ public class EnemyMovement : MonoBehaviour {
 	private void FollowPatrolPoints() {
 		myNavMeshAgent.speed = walkSpeed;
 
-		TryToSetNewDestination (patrolPoints [patrolPointIndex].transform.position);
+		myNavMeshAgent.TryToSetNewDestination (patrolPoints [patrolPointIndex].transform.position);
 
 		if (!myNavMeshAgent.pathPending) {
 			if (myNavMeshAgent.remainingDistance < myNavMeshAgent.stoppingDistance) {
@@ -90,7 +91,11 @@ public class EnemyMovement : MonoBehaviour {
 		if (myPlayerState.isAlive) {
 			myNavMeshAgent.speed = runSpeed;
 
-			TryToSetNewDestination (myPlayerState.gameObject.transform.position);
+			if (myFollowingPlayerTimer == followingPlayerTimeLength) {
+				myNavMeshAgent.SetDestination (myPlayerState.gameObject.transform.position);
+			} else {
+				myNavMeshAgent.TryToSetNewDestination (myPlayerState.gameObject.transform.position);
+			}
 
 			myFollowingPlayerTimer -= deltaTime;
 			if (myFollowingPlayerTimer <= 0.0f)
@@ -98,15 +103,6 @@ public class EnemyMovement : MonoBehaviour {
 
 		} else {
 			isFollowingPlayer = false;
-		}
-	}
-
-	private void TryToSetNewDestination(Vector3 newDestination){
-
-		float distanceDestinationPoint = Vector3.Distance (myNavMeshAgent.destination, newDestination);
-
-		if ( (myNavMeshAgent.pathPending == false && distanceDestinationPoint > 1.0f ) || (myNavMeshAgent.hasPath == false && myNavMeshAgent.pathPending == false)) {
-			myNavMeshAgent.SetDestination (newDestination);
 		}
 	}
 }
