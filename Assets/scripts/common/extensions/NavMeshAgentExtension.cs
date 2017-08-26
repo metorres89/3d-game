@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public static class NavMeshAgentExtension
 {
 
-	public static bool TryToSetNewDestination (this NavMeshAgent target, Vector3 newDestination, float minDistance = 1.0f)
+	public static bool TryToSetNewDestination (this NavMeshAgent target, Vector3 newDestination, float minDistance = 0.2f)
 	{
 		float destinationDifference = Vector3.Distance (target.destination, newDestination);
 

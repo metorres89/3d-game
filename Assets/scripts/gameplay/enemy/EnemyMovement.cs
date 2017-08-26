@@ -13,6 +13,7 @@ public class EnemyMovement : MonoBehaviour {
 	[SerializeField] private float walkSpeed = 1.0f;
 	[SerializeField] private float runSpeed = 3.0f;
 	[SerializeField] private bool syncNavMeshSpeedAndAnimationSpeed = false;
+	[SerializeField] private float patrolPointCheckRadius = 100.0f;
 
 	private EnemyState myEnemyState;
 	private NavMeshAgent myNavMeshAgent;
@@ -29,7 +30,7 @@ public class EnemyMovement : MonoBehaviour {
 		isFollowingPlayer = false;
 
 		if (patrolPoints.Length == 0) {
-			patrolPoints = GameObject.FindGameObjectsWithTag ("PatrolPoint");
+			SearchPatrolPoints ();
 		}
 
 		//by default navmesh speed is walking speed
@@ -45,6 +46,26 @@ public class EnemyMovement : MonoBehaviour {
 			ProcessMovement (Time.fixedDeltaTime);
 		}
 
+	}
+
+	private void SearchPatrolPoints() {
+		
+		if (patrolPointCheckRadius > 0.0f) {
+			int patrolPointBitMask = 1 << LayerMask.NameToLayer ("PatrolPoint");
+
+			Collider[] colPatrolPoints = Physics.OverlapSphere (gameObject.transform.position, patrolPointCheckRadius, patrolPointBitMask);
+
+			patrolPoints = new GameObject [colPatrolPoints.Length];
+
+			for (int index = 0; index < colPatrolPoints.Length; index++) {
+				patrolPoints [index] = colPatrolPoints [index].gameObject;
+			}
+		} else {
+			patrolPoints = GameObject.FindGameObjectsWithTag ("PatrolPoint");
+		}
+
+
+		patrolPointIndex = Random.Range (0, patrolPoints.Length - 1);
 	}
 
 	private void ProcessMovement( float deltaTime ) {
@@ -73,15 +94,19 @@ public class EnemyMovement : MonoBehaviour {
 	}
 
 	private void FollowPatrolPoints() {
-		myNavMeshAgent.speed = walkSpeed;
 
-		myNavMeshAgent.TryToSetNewDestination (patrolPoints [patrolPointIndex].transform.position);
+		if (patrolPoints.Length > 0) {
+			
+			myNavMeshAgent.speed = walkSpeed;
 
-		if (!myNavMeshAgent.pathPending) {
-			if (myNavMeshAgent.remainingDistance < myNavMeshAgent.stoppingDistance) {
-				patrolPointIndex++;
-				if (patrolPointIndex >= patrolPoints.Length) {
-					patrolPointIndex = 0;
+			myNavMeshAgent.TryToSetNewDestination (patrolPoints [patrolPointIndex].transform.position);
+
+			if (!myNavMeshAgent.pathPending) {
+				if (myNavMeshAgent.remainingDistance < myNavMeshAgent.stoppingDistance) {
+					patrolPointIndex++;
+					if (patrolPointIndex >= patrolPoints.Length) {
+						patrolPointIndex = 0;
+					}
 				}
 			}
 		}
