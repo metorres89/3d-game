@@ -46,6 +46,7 @@ public class EnemyState : HealthState {
 				myEnemyItemDrop.DropRandomItem ();
 				myCollider.enabled = false;
 				myShowEnemyStats.enabled = false;
+				myEnemyMovement.enabled = false;
 			}
 
 			AlertNearEnemies ();

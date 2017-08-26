@@ -19,7 +19,7 @@ public class TurretShoot : MonoBehaviour {
 	private float shootTimer;
 	private AudioSource myAudioSource;
 	private int shootBitMask;
-
+	private bool targetReveleadHisPosition = false;
 	void Start () {
 		myPlayerState = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerState> ();
 		shootOrigin = gameObject.transform.Find ("ShootOrigin").gameObject;
@@ -39,7 +39,9 @@ public class TurretShoot : MonoBehaviour {
 
 		targetDistance = Vector3.Distance (shootOrigin.transform.position, targetPosition);
 
-		if (targetDistance <= minDistanceToShoot) {
+		bool targetIsInsideAttackArea = (targetDistance <= minDistanceToShoot);
+
+		if (targetIsInsideAttackArea || targetReveleadHisPosition) {
 
 			RotateToTarget (Time.fixedDeltaTime);
 
@@ -92,5 +94,9 @@ public class TurretShoot : MonoBehaviour {
 			yield return new WaitForSeconds (delay);
 			shootLineRenderer.enabled = false;
 		}
+	}
+
+	public void TargetHasRevealedHisPosition(){
+		targetReveleadHisPosition = true;
 	}
 }

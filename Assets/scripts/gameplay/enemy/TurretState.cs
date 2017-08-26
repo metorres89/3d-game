@@ -16,6 +16,9 @@ public class TurretState : HealthState {
 		if (isAlive) {
 			
 			base.ReceiveDamage (damage);
+
+			myTurretShoot.TargetHasRevealedHisPosition ();
+
 			myShowEnemyStats.healthBar.UpdateAmount (base.GetHealthPoints ());
 
 			if (!isAlive) {
