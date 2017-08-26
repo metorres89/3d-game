@@ -41,16 +41,19 @@ public class EnemyState : HealthState {
 			if (isAlive) {
 				myEnemyMovement.StartFollowingPlayer ();
 			} else {
-				GameplayState.KilledEnemies++;
-				myAnimatorState.TriggerAnimation ("dead", 1.0f);
-				myEnemyItemDrop.DropRandomItem ();
-				myCollider.enabled = false;
-				myShowEnemyStats.enabled = false;
-				myEnemyMovement.enabled = false;
+				
 			}
 
 			AlertNearEnemies ();
 		}
+	}
+
+	public override void OnDead(){
+		GameplayState.KilledEnemies++;
+		myAnimatorState.TriggerAnimation ("dead", 1.0f);
+		myEnemyItemDrop.DropRandomItem ();
+		myCollider.enabled = false;
+		myShowEnemyStats.enabled = false;
 	}
 
 	private void AlertNearEnemies() {

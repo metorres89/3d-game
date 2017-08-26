@@ -34,7 +34,7 @@ public class EnemyAttack : MonoBehaviour {
 
 				attackTimer -= Time.fixedDeltaTime;
 				myEnemyState.isAttacking = true;
-				myEnemyState.GetAnimatorState().TriggerAnimation ("attack", attackSpeed);
+				myEnemyState.GetAnimatorState ().TriggerAnimation ("attack", attackSpeed);
 				if (attackTimer <= 0.0f) {
 					Attack ();
 					attackTimer = attackSpeed;
@@ -43,6 +43,8 @@ public class EnemyAttack : MonoBehaviour {
 			} else {
 				myEnemyState.isAttacking = false;
 			}
+		} else {
+			DestroyImmediate (this);
 		}
 	}
 

@@ -23,7 +23,12 @@ public class HealthState : MonoBehaviour {
 
 		if (currentHealthPoints == 0.0f) {
 			isAlive = false;
+			OnDead ();
 		}
+	}
+
+	public virtual void OnDead(){
+	
 	}
 
 	public void RestoreHealthPoints(float amount) {

@@ -17,6 +17,7 @@ public class AmmoPack : MonoBehaviour {
 	public void OnTriggerEnter(Collider col) {
 		if (col.tag == "Player") {
 			myPlayerShoot.AddAmmoPack (stock);
+			this.enabled = false;
 			Destroy (gameObject);
 		}
 	}

@@ -44,6 +44,8 @@ public class EnemyMovement : MonoBehaviour {
 
 		if (myNavMeshAgent.enabled && myEnemyState.isAttacking == false) {
 			ProcessMovement (Time.fixedDeltaTime);
+		}else if (myNavMeshAgent.enabled == false) {
+			DestroyImmediate (this);
 		}
 
 	}
