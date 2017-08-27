@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TurretShoot : MonoBehaviour {
 	
-	[SerializeField] private float minDistanceToShoot = 10.0f;
+	[SerializeField] private float minDistanceToShoot = 50.0f;
 	[SerializeField] private float rotationSpeed = 3.0f;
 	[SerializeField] private float minDamage = 10.0f;
 	[SerializeField] private float maxDamage = 10.0f;
@@ -20,6 +20,7 @@ public class TurretShoot : MonoBehaviour {
 	private AudioSource myAudioSource;
 	private int shootBitMask;
 	private bool targetReveleadHisPosition = false;
+
 	void Start () {
 		myPlayerState = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerState> ();
 		shootOrigin = gameObject.transform.Find ("ShootOrigin").gameObject;

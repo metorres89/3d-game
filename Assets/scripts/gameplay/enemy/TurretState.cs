@@ -26,6 +26,5 @@ public class TurretState : HealthState {
 		myShowEnemyStats.enabled = false;
 		myTurretShoot.enabled = false;
 		DestroyImmediate (myShowEnemyStats);
-		DestroyImmediate (myTurretShoot);
 	}
 }
