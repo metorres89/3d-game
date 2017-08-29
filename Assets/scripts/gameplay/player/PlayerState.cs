@@ -45,8 +45,6 @@ public class PlayerState : HealthState {
 
 			base.ReceiveDamage (damage);
 
-			Debug.Log("we have to display damage effect on screen!");
-
 			bloodFadingImage.FadeInThenFadeOut (0.5f);
 		}
 	}

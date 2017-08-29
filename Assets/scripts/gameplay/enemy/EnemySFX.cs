@@ -25,8 +25,6 @@ public class EnemySFX : MonoBehaviour {
 
 				int randomIndex = Random.Range (0, whileIdleClips.Length);
 
-				Debug.LogFormat("whileIdleClips.Lenght:{0} - randomIndex: {1}", whileIdleClips.Length, randomIndex);
-
 				myAudioSource.clip = whileIdleClips [randomIndex];
 
 				myAudioSource.Play ();

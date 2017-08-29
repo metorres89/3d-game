@@ -94,6 +94,8 @@ public class PlayerMovement : MonoBehaviour {
 			}
 		}
 
+
+
 		//velocity update
 
 		Vector3 gravityAcceleration = new Vector3 (0.0f, myRigidbody.velocity.y, 0.0f);
