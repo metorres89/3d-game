@@ -8,6 +8,8 @@ public class EnemyState : HealthState {
 	private AnimatorState myAnimatorState;
 	private ShowEnemyStats myShowEnemyStats;
 	private EnemyItemDrop myEnemyItemDrop;
+	private EnemySFX myEnemySFX;
+
 	private Collider myCollider;
 	private bool enemiesAlerted;
 
@@ -23,6 +25,7 @@ public class EnemyState : HealthState {
 		myShowEnemyStats = gameObject.GetComponent<ShowEnemyStats> ();
 		myEnemyItemDrop = gameObject.GetComponent<EnemyItemDrop> ();
 		myCollider = gameObject.GetComponent<Collider> ();
+		myEnemySFX = gameObject.GetComponent<EnemySFX> ();
 
 		isAttacking = false;
 
@@ -54,6 +57,7 @@ public class EnemyState : HealthState {
 		myEnemyItemDrop.DropRandomItem ();
 		myCollider.enabled = false;
 		myShowEnemyStats.enabled = false;
+		myEnemySFX.enabled = false;
 	}
 
 	private void AlertNearEnemies() {
@@ -80,5 +84,9 @@ public class EnemyState : HealthState {
 
 	public AnimatorState GetAnimatorState(){
 		return myAnimatorState;
+	}
+
+	public EnemySFX GetEnemySFX(){
+		return myEnemySFX;
 	}
 }

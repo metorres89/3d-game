@@ -57,6 +57,9 @@ public class EnemyAttack : MonoBehaviour {
 			HealthState playerState = myPlayerRef.GetComponent<HealthState> ();
 			playerState.ReceiveDamage (currentAttackDamage);
 
+			//FXAudio.PlayClip ("bloodfx4", myEnemyState.GetEnemySFX ().GetAudioSource ());
+			myEnemyState.GetEnemySFX().PlayHitPlayerSFX();
+
 			if (attackForce > 0.0f) {
 				Vector3 impact = gameObject.transform.forward * attackForce;
 				impact.y = 100;

@@ -50,4 +50,8 @@ public class PlayerState : HealthState {
 			bloodFadingImage.FadeInThenFadeOut (0.5f);
 		}
 	}
+
+	public override void OnDead(){
+		FXAudio.PlayClip ("Scream_Male_01");
+	}
 }

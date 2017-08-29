@@ -112,7 +112,7 @@ public class PlayerMovement : MonoBehaviour {
 
 		if (jumpAxis != 0.0f && isOnGround == true && jumpAxisInUse == false) {
 			jumpAxisInUse = true;
-			FXAudio.PlayClip ("jump");
+			FXAudio.PlayClip ("Jump");
 			myRigidbody.AddForce (Vector3.up * jumpForce);
 		}
 
